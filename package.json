@@ -1,6 +1,6 @@
 {
     "name": "ngfx",
-    "version": "0.0.0",
+    "version": "1.0.0-beta.2",
     "scripts": {
         "build": "ng build",
         "e2e": "ng e2e",

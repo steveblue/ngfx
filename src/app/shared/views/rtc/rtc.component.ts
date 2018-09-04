@@ -12,7 +12,7 @@ export class RtcComponent implements OnInit {
   public messages : string[] = new Array();
 
   constructor(private _client: NgFxDataChannel,
-              private _ref: ChangeDetectorRef ) { }
+              private _ref: ChangeDetectorRef ) {}
 
   ngOnInit() {
 
