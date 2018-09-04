@@ -2,7 +2,7 @@ import { Injectable, Inject, InjectionToken, EventEmitter } from '@angular/core'
 import { Observable, Observer } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-export interface NgToolsDataChannelConfig {
+export interface NgFxDataChannelConfig {
         key: string
         id: string
         signalServer: string
@@ -30,10 +30,10 @@ export const createKey = function () {
 
 };
 
-export const NgToolsDataChannelConfigService = new InjectionToken<NgToolsDataChannelConfig>('NgToolsDataChannelConfig');
+export const NgFxDataChannelConfigService = new InjectionToken<NgFxDataChannelConfig>('NgFxDataChannelConfig');
 
 @Injectable()
-export class NgToolsDataChannel {
+export class NgFxDataChannel {
 
   public id: string;
   public key: string;
@@ -67,7 +67,7 @@ export class NgToolsDataChannel {
     messages: any
   };
 
-  constructor(@Inject(NgToolsDataChannelConfigService) private config) {
+  constructor(@Inject(NgFxDataChannelConfigService) private config) {
 
     //let self = this;
 

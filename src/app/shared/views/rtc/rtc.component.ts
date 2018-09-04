@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NgToolsDataChannel } from './../../../lib/rtc/src/services/data-channel/data-channel.service';
+import { NgFxDataChannel } from './../../../lib/rtc/src/services/data-channel/data-channel.service';
 
 
 @Component({
@@ -11,7 +11,7 @@ export class RtcComponent implements OnInit {
 
   public messages : string[] = new Array();
 
-  constructor(private _client: NgToolsDataChannel,
+  constructor(private _client: NgFxDataChannel,
               private _ref: ChangeDetectorRef ) { }
 
   ngOnInit() {
