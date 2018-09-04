@@ -1,7 +1,13 @@
 {
   "name": "@ngfx/rtc",
-  "version": "1.0.0-beta.0",
-  "description": "",
+  "version": "1.0.0-beta.1",
+  "repository": "https://github.com/steveblue/ngfx",
+  "homepage": "https://github.com/steveblue/ngfx#readme",
+  "description": "Angular service that allows p2p communication over WebRTC DataChannel with fallback to WebSocket",
+  "bugs": {
+    "url" : "https://github.com/steveblue/ngfx/issues"
+  },
+  "keywords": ["webrtc", "datachannel", "websocket", "ui", "front end", "angular", "service"],
   "license": "MIT",
   "module": "./esm5/rtc.es5.js",
   "es2015": "./fesm2015/rtc.js",
