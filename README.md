@@ -1,6 +1,10 @@
 # @ng-tools
 
-## Library of resuable components for use in Angular projects.
+#### Angular Component Library
+
+This repository is a development environment for the `@ng-tools` library of reusable Components. This project includes patterns for UI development that keep popping up in the course of Angular development.
+
+## Packages
 
 
 | Package       | Description                                          |
