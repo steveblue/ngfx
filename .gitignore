@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/out-css
+/src/**/*.css
 
 # dependencies
 /node_modules
@@ -25,6 +27,7 @@
 !.vscode/extensions.json
 
 # misc
+
 /.sass-cache
 /connect.lock
 /coverage

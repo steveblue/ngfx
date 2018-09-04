@@ -1,6 +1,6 @@
 {
   "name": "@ng-tools/rtc",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.0",
   "description": "",
   "license": "MIT",
   "module": "./esm5/rtc.es5.js",

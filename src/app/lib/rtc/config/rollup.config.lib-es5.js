@@ -3,7 +3,7 @@
 export default {
   input: 'out-tsc/es5/rtc.js',
   output: {
-    file: 'dist/rtc/fesm5/rtc.js',
+    file: 'dist/@ng-tools/rtc/fesm5/rtc.js',
     format: 'es',
     sourcemap: true
   },

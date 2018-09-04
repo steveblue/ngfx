@@ -1,3 +1,4 @@
+/* line 1, src/app/shared/components/lazy/lazy.component.scss */
 :host {
   position: absolute;
   width: 100%;
@@ -5,6 +6,7 @@
   background: red;
 }
 
+/* line 8, src/app/shared/components/lazy/lazy.component.scss */
 .is--center {
   width: 256px;
   height: 256px;
@@ -17,14 +19,14 @@
           perspective: 1000px;
 }
 
+/* line 16, src/app/shared/components/lazy/lazy.component.scss */
 .is--center .app__icon {
   width: 100%;
   height: 100%;
 }
 
+/* line 19, src/app/shared/components/lazy/lazy.component.scss */
 .is--center .app__icon img {
   width: 100%;
   height: 100%;
 }
-
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxhenkuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLG1CQUFtQjtFQUNuQixZQUFZO0VBQ1osYUFBYTtFQUNiLGdCQUFnQjtDQUNqQjs7QUFFRDtFQUNFLGFBQWE7RUFDYixjQUFjO0VBQ2QsbUJBQW1CO0VBQ25CLFNBQVM7RUFDVCxVQUFVO0VBQ1YscURBQTZDO1VBQTdDLDZDQUE2QztFQUM3Qyw0QkFBb0I7VUFBcEIsb0JBQW9CO0NBQ3JCOztBQUVEO0VBQ0UsWUFBWTtFQUNaLGFBQWE7Q0FDZDs7QUFFRDtFQUNFLFlBQVk7RUFDWixhQUFhO0NBQ2QiLCJmaWxlIjoibGF6eS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOmhvc3Qge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIHdpZHRoOiAxMDAlO1xuICBoZWlnaHQ6IDEwMCU7XG4gIGJhY2tncm91bmQ6IHJlZDtcbn1cblxuLmlzLS1jZW50ZXIge1xuICB3aWR0aDogMjU2cHg7XG4gIGhlaWdodDogMjU2cHg7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgdG9wOiA1MCU7XG4gIGxlZnQ6IDUwJTtcbiAgdHJhbnNmb3JtOiB0cmFuc2xhdGVYKC01MCUpIHRyYW5zbGF0ZVkoLTUwJSk7XG4gIHBlcnNwZWN0aXZlOiAxMDAwcHg7XG59XG5cbi5pcy0tY2VudGVyIC5hcHBfX2ljb24ge1xuICB3aWR0aDogMTAwJTtcbiAgaGVpZ2h0OiAxMDAlO1xufVxuXG4uaXMtLWNlbnRlciAuYXBwX19pY29uIGltZyB7XG4gIHdpZHRoOiAxMDAlO1xuICBoZWlnaHQ6IDEwMCU7XG59XG4iXX0= */

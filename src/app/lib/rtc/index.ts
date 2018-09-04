@@ -1,1 +1,1 @@
-export * from './src/components/default/default.module';
+export * from './src/services/data-channel/data-channel.module';

@@ -1,28 +1,28 @@
 {
     "src": "src/app/lib/rtc",
-    "dist": "dist/rtc",
+    "dist": "dist/@ng-tools/rtc",
     "filename": "rtc",
     "es2015": {
         "tsConfig": "tsconfig.lib.fesm2015.json",
         "rollupConfig": "rollup.config.lib.js",
-        "outFile": "dist/rtc/fesm2015/rtc.js"
+        "outFile": "dist/@ng-tools/rtc/fesm2015/rtc.js"
     },
     "es5": {
         "tsConfig": "tsconfig.lib.es5.json",
         "rollupConfig": "rollup.config.lib-es5.js",
-        "outFile": "dist/rtc/fesm5/rtc.js"
+        "outFile": "dist/@ng-tools/rtc/fesm5/rtc.js"
     },
     "umd": {
         "tsConfig": "tsconfig.lib.umd.json",
         "rollupConfig": "rollup.config.lib-umd.js",
-        "outFile": "dist/rtc/bundles/rtc.umd.js"
+        "outFile": "dist/@ng-tools/rtc/bundles/rtc.umd.js"
     },
     "esm5": {
         "tsConfig": "tsconfig.lib.esm5.json",
-        "outFile": "dist/rtc/esm5/rtc.js"
+        "outFile": "dist/@ng-tools/rtc/esm5/rtc.js"
     },
     "esm2015": {
         "tsConfig": "tsconfig.lib.esm2015.json",
-        "outFile": "dist/rtc/esm2015/rtc.js"
+        "outFile": "dist/@ng-tools/rtc/esm2015/rtc.js"
     }
 }
