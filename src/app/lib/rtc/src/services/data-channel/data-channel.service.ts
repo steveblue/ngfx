@@ -7,7 +7,8 @@ export interface NgToolsDataChannelConfig {
         id: string
         signalServer: string
         announceServer: string
-        messageServer: string
+        messageServer: string,
+        debug?: boolean
 }
 
 export const uuid = function () {
@@ -97,7 +98,7 @@ export class NgToolsDataChannel {
     this.websocketConnections = {};
 
     this.isWebSocket = (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window['MSStream']) ? true : false;
-    this.debug = false;
+    this.debug = config && config.debug ? config.debug : false;
 
 
     this.store = { messages: [] };
@@ -109,8 +110,7 @@ export class NgToolsDataChannel {
     };
 
     this.peerConnectionConfig = {
-      ordered: false,
-      maxRetransmitTime: 1000
+      ordered: false
     };
 
 
