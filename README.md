@@ -1,6 +1,14 @@
-# angular-rollup
+# ng-tools
 
-Another cli for building Angular. `angular-rollup` works seamlessly with `@angular/cli` to provide additional builds with Rollup and/or Closure Compiler.
+## Library of resuable components for use in Angular projects.
+
+
+| Package       | Description                                          |
+| ------------- |:-----------------------------------------------------|
+| rtc           | A service for connecting p2p over WebRTC DataChannel |
+
+
+This project is built with `angular-rollup`.
 
 ```
 
