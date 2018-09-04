@@ -1,0 +1,23 @@
+{
+  "name": "rtc",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "module": "./esm5/rtc.es5.js",
+  "es2015": "./fesm2015/rtc.js",
+  "esm5": "./esm5/rtc.js",
+  "esm2015": "./esm2015/rtc.js",
+  "fesm5": "./fesm5/rtc.js",
+  "fesm2015": "./fesm2015/rtc.js",
+  "main": "./bundles/rtc.umd.js",
+  "typings": "rtc.d.ts",
+  "devDependencies": {
+    "@angular/core": "^6.0.0",
+    "@angular/compiler": "^6.0.0",
+    "@angular/compiler-cli": "^6.0.0",
+    "rollup": "^0.55.0",
+    "rxjs": "^6.0.0",
+    "typescript": "^2.7.2",
+    "zone.js": "^0.8.26"
+  }
+}

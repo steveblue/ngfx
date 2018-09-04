@@ -1,0 +1,16 @@
+{
+  "extends": "./../tsconfig.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./../dist/ng-tools",
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": false
+  },
+  "angularCompilerOptions": {
+    "skipMetadataEmit": true
+  },
+  "include": [
+    "./../src/**/*.ts"
+  ]
+}
