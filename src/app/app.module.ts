@@ -21,9 +21,9 @@ const uuid = function () {
 const DataChannelConfig = {
     key: 'openSeasame',
     id: uuid(),
-    signalServer: `ws://192.168.1.4:5555`,
-    announceServer: `ws://192.168.1.4:5556`,
-    messageServer: `ws://192.168.1.4:5557`,
+    signalServer: `ws://localhost:5555`,
+    announceServer: `ws://localhost:5556`,
+    messageServer: `ws://localhost:5557`,
     debug: true
 }
 
