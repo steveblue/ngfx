@@ -1,4 +1,4 @@
-# ng-tools
+# @ng-tools
 
 ## Library of resuable components for use in Angular projects.
 
@@ -9,14 +9,6 @@
 
 
 This project is built with `angular-rollup`.
-
-```
-
-
-
-
-
-
 
 
 
