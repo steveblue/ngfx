@@ -3,7 +3,7 @@
 export default {
   input: 'out-tsc/es5/rtc.js',
   output: {
-    file: 'dist/@ng-tools/rtc/bundles/rtc.umd.js',
+    file: 'dist/@ngfx/rtc/bundles/rtc.umd.js',
     format: 'cjs',
     sourcemap: true
   },

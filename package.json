@@ -1,5 +1,5 @@
 {
-    "name": "ng-tools",
+    "name": "ngfx",
     "version": "0.0.0",
     "scripts": {
         "build": "ng build",

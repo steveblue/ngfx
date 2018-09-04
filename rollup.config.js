@@ -36,7 +36,7 @@ export default {
     input: 'main.js',
     treeshake: true,
     output: {
-        file: 'dist/ng-tools/bundle.es2015.js',
+        file: 'dist/ngfx/bundle.es2015.js',
         format: 'iife'
     },
     plugins: [

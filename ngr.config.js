@@ -19,7 +19,7 @@ module.exports = {
     }
   },
   projects: {
-    "@ng-tools/rtc": {
+    "@ngfx/rtc": {
       root: "src/app/lib/rtc",
       sourceRoot: "src",
       projectType: "library",
@@ -28,13 +28,13 @@ module.exports = {
         build: {
           builder: "angular-rollup",
           options: {
-            outputPath: "dist/@ng-tools/rtc",
+            outputPath: "dist/@ngfx/rtc",
             styles: []
           }
         }
       }
     },
-    "ng-tools": {
+    "ngfx": {
       root: "",
       sourceRoot: "src",
       projectType: "application",
@@ -43,7 +43,7 @@ module.exports = {
         build: {
           builder: "angular-rollup",
           options: {
-            outputPath: "dist/ng-tools",
+            outputPath: "dist/ngfx",
             styles: ["src/style/style.scss"],
             lib: {
               dev: [
@@ -81,7 +81,7 @@ module.exports = {
                 "systemjs/dist/system.js"
               ],
               src: "node_modules",
-              dist: "dist/ng-tools/lib"
+              dist: "dist/ngfx/lib"
             }
           }
         }
