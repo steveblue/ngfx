@@ -1,0 +1,28 @@
+{
+    "src": "src/app/lib/ui",
+    "dist": "dist/@ngfx/ui",
+    "filename": "ui",
+    "es2015": {
+        "tsConfig": "tsconfig.lib.fesm2015.json",
+        "rollupConfig": "rollup.config.lib.js",
+        "outFile": "dist/@ngfx/ui/fesm2015/ui.js"
+    },
+    "es5": {
+        "tsConfig": "tsconfig.lib.es5.json",
+        "rollupConfig": "rollup.config.lib-es5.js",
+        "outFile": "dist/@ngfx/ui/fesm5/ui.js"
+    },
+    "umd": {
+        "tsConfig": "tsconfig.lib.umd.json",
+        "rollupConfig": "rollup.config.lib-umd.js",
+        "outFile": "dist/@ngfx/ui/bundles/ui.umd.js"
+    },
+    "esm5": {
+        "tsConfig": "tsconfig.lib.esm5.json",
+        "outFile": "dist/@ngfx/ui/esm5/ui.js"
+    },
+    "esm2015": {
+        "tsConfig": "tsconfig.lib.esm2015.json",
+        "outFile": "dist/@ngfx/ui/esm2015/ui.js"
+    }
+}

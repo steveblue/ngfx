@@ -19,6 +19,21 @@ module.exports = {
     }
   },
   projects: {
+    "@ngfx/ui": {
+      root: "src/app/lib/ui",
+      sourceRoot: "src",
+      projectType: "library",
+      configFile: "lib.config.json",
+      architect: {
+        build: {
+          builder: "angular-rollup",
+          options: {
+            outputPath: "dist/@ngfx/ui",
+            styles: []
+          }
+        }
+      }
+    },
     "@ngfx/rtc": {
       root: "src/app/lib/rtc",
       sourceRoot: "src",

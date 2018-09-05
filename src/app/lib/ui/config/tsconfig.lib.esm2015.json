@@ -1,0 +1,18 @@
+{
+    "extends": "../tsconfig.lib.json",
+    "compilerOptions": {
+        "outDir": "../../../../../out-tsc/esm2015",
+        "module": "es2015",
+        "target": "es2015"
+    },
+    "angularCompilerOptions": {
+        "strictMetadataEmit": true,
+        "skipTemplateCodegen": true,
+        "annotateForClosureCompiler": true,
+        "flatModuleOutFile": "ui.js",
+        "flatModuleId": "ui"
+    },
+    "files": [
+        "../../../../../tmp/index.ts"
+    ]
+}

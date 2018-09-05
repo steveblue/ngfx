@@ -5,9 +5,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent }  from './app.component';
 import { routing }       from './app.routes';
+
 import { HomeModule } from './shared/views/home/home.module';
 import { LazyModule } from './shared/views/lazy/lazy.module';
 import { RtcModule } from './shared/views/rtc/rtc.module';
+import { UiModule } from './shared/views/ui/ui.module';
 
 import { DataChannelModule } from './lib/rtc/src/services/data-channel/data-channel.module';
 
@@ -35,6 +37,7 @@ const DataChannelConfig = {
                HomeModule,
                LazyModule,
                RtcModule,
+               UiModule,
                DataChannelModule.forRoot(DataChannelConfig),
                routing],
     declarations: [ AppComponent ],
