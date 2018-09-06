@@ -1,36 +1,25 @@
 import { Directive, ElementRef, Input, OnInit, HostListener, EventEmitter } from '@angular/core';
 
-export interface NgFxUI {
-    position: string
-}
-
 export interface NgFxEvent {
   type: string,
-  currentValue: number | number[],
-  timeStamp: Date,
   endFrame?: boolean,
-  control?: string,
-  ui: NgFxUI
+  control: NgFxControl
 }
 
-export interface NgFxDraggableOptions {
+export interface NgFxControl {
   name: string,
   orient: string,
   min: number | number[],
   max: number | number[],
   isActive?: boolean,
+  hasUserInput?: boolean,
   currentValue?: number | number[],
   position?: string,
   x?: number,
   y?: number,
-  float?: string,
-  isControlled?: boolean,
   height?: number,
   width?: number,
-  timeStamp?: Date,
-  onUpdate?: EventEmitter<NgFxEvent>,
-  onSlave?: EventEmitter<NgFxEvent>,
-  slave?: EventEmitter<NgFxEvent>
+  timeStamp?: Date
 }
 
 @Directive({
@@ -39,74 +28,62 @@ export interface NgFxDraggableOptions {
 
 export class NgFxDraggableDirective implements OnInit {
 
-  public elem: any;
-  public handle: any;
-  public startX: number;
-  public startY: number;
-  public newX: number;
-  public newY: number;
-  public joystickPos: number[];
-  public target: any;
-  public touchItem: any;
-  public height: number;
-  public width: number;
-  public isActive: boolean;
-  public isPositionable: boolean;
-  public hasMasterController: boolean;
+  private _rect: ClientRect | DOMRect;
+  private _joystickPos: number[];
+  private _touchItem: number | null;
+  private _elem: HTMLElement;
+  private _handle: HTMLElement;
+  private _timeout: number;
   public cancelMaster: boolean;
-  public rect: any;
-  public position: string;
-  private timeout: any;
+  public onUpdate: EventEmitter<NgFxEvent>;
 
-  @Input('draggable') draggable: NgFxDraggableOptions;
+  @Input('draggable') model: NgFxControl;
 
-  constructor(private el: ElementRef) {
+  constructor(private _el: ElementRef) {
 
-    this.elem = el.nativeElement;
-    this.hasMasterController = false;
+    this._elem = _el.nativeElement;
+    this.onUpdate = new EventEmitter();
 
   }
 
   ngOnInit() {
 
-    this.handle = this.elem.getElementsByClassName('ngfx__slider__handle')[0];
-    this.height = this.elem.clientHeight;
-    this.width = this.elem.clientWidth;
-    this.draggable.height = this.height;
-    this.draggable.width = this.width;
+    let nodeList: HTMLElement[] = (<HTMLElement[]> <any> this._elem.getElementsByClassName('ngfx__slider__handle'));
 
-    if (this.draggable.orient === 'is--hor') {
-      this.draggable.currentValue = 0;
-      this.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
-    } else if (this.draggable.orient === 'is--vert') {
-      this.draggable.currentValue = 0;
-      this.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
-    } else if (this.draggable.orient === 'is--joystick') {
-      this.draggable.currentValue = [0,0];
-      this.newX = this.newY = 76;
-      this.position = 'translate3d(' + 76 + 'px' + ',' + 76 + 'px' + ',' + 1 + 'px' + ')';
+    this._touchItem = null;
+    this._handle = nodeList[0];
+    this.model.height = this._elem.clientHeight;
+    this.model.width = this._elem.clientWidth;
+
+    if (this.model.orient === 'is--hor') {
+      this.model.currentValue = 0;
+      this.model.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
+    } else if (this.model.orient === 'is--vert') {
+      this.model.currentValue = 0;
+      this.model.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
+    } else if (this.model.orient === 'is--joystick') {
+      this.model.currentValue = [0,0];
+      this.model.x = this.model.y = 76;
+      this.model.position = 'translate3d(' + 76 + 'px' + ',' + 76 + 'px' + ',' + 1 + 'px' + ')';
     }
 
-    //this.slaveListener();
-
-    // TODO init based on this.draggable.currentValue
+    // TODO init based on this.model.currentValue
 
   }
 
   @HostListener('mouseleave', ['$event']) onMouseLeave(e) {
-    this.isPositionable = false;
+    this.model.hasUserInput = false;
   }
 
   @HostListener('mouseenter', ['$event']) onMouseEnter(e) {
-    if (this.isActive) {
-      this.isPositionable = true;
+    if (this.model.isActive) {
+      this.model.hasUserInput = true;
       this.cancelMaster = true;
     }
   }
 
   @HostListener('touchstart', ['$event']) onTouchStart(e) {
       this.cancelMaster = true;
-      this.draggable.isControlled = false;
       this.onMouseDown(e);
   }
 
@@ -114,26 +91,19 @@ export class NgFxDraggableDirective implements OnInit {
 
     e.preventDefault();
 
-    this.isActive = true;
-    this.isPositionable = true;
-    this.draggable.isControlled = false;
+    this.model.isActive = true;
+    this.model.hasUserInput = true;
 
-    this.startX = e.clientX - this.elem.offsetLeft;
-    this.startY = e.clientY - this.elem.offsetTop;
-
-    this.rect = this.elem.getBoundingClientRect();
-    this.height = this.elem.clientHeight;
-    this.width = this.elem.clientWidth;
-    this.draggable.height = this.height;
-    this.draggable.width = this.width;
-
+    this._rect = this._elem.getBoundingClientRect();
+    this.model.height = this._elem.clientHeight;
+    this.model.width = this._elem.clientWidth;
 
     if ('ontouchstart' in document.documentElement) {
-      this.elem.addEventListener('touchmove', this.onTouchMove.bind(this));
-      this.elem.addEventListener('touchend', this.onMouseUp.bind(this));
+      this._elem.addEventListener('touchmove', this.onTouchMove.bind(this));
+      this._elem.addEventListener('touchend', this.onMouseUp.bind(this));
     } else {
-      this.elem.addEventListener('mousemove', this.onMouseMove.bind(this));
-      this.elem.addEventListener('mouseup', this.onMouseUp.bind(this));
+      this._elem.addEventListener('mousemove', this.onMouseMove.bind(this));
+      this._elem.addEventListener('mouseup', this.onMouseUp.bind(this));
       window.addEventListener('mousemove', this.onMouseMove.bind(this));
       window.addEventListener('mouseup', this.onMouseUp.bind(this));
     }
@@ -141,21 +111,22 @@ export class NgFxDraggableDirective implements OnInit {
     if ('ontouchstart' in document.documentElement) {
       e.preventDefault();
 
-      if (this.touchItem === undefined) {
-        this.touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
+      if (this._touchItem === null) {
+        // make this touch = the latest touch in the touches list instead of using event
+        this._touchItem = e.touches.length - 1;
       }
 
-      this.newX = e.touches[this.touchItem].pageX - this.rect.left - (this.handle.clientWidth / 2);
-      this.newY = e.touches[this.touchItem].pageY - this.rect.top - (this.handle.clientWidth / 2);
+      this.model.x = e.touches[this._touchItem].pageX - this._rect.left - (this._handle.clientWidth / 2);
+      this.model.y = e.touches[this._touchItem].pageY - this._rect.top - (this._handle.clientWidth / 2);
 
     } else {
 
-      this.newX = e.offsetX;
-      this.newY = e.offsetY;
+      this.model.x = e.offsetX;
+      this.model.y = e.offsetY;
 
     }
 
-    this.setPosition(this.newX, this.newY);
+    this.setPosition(this.model.x, this.model.y);
 
   }
 
@@ -165,30 +136,30 @@ export class NgFxDraggableDirective implements OnInit {
 
     e.preventDefault();
 
-    this.handle.style.opacity = '0.5';
+    this._handle.style.opacity = '0.5';
 
-    if (this.touchItem === undefined) {
-      this.touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
+    if (this._touchItem === null) {
+      this._touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
     }
 
-    this.newX = e.touches[this.touchItem].pageX - this.rect.left - 22;
-    this.newY = e.touches[this.touchItem].pageY - this.rect.top - 66;
+    this.model.x = e.touches[this._touchItem].pageX - this._rect.left - 22;
+    this.model.y = e.touches[this._touchItem].pageY - this._rect.top - 66;
 
-    this.setPosition(this.newX, this.newY);
+    this.setPosition(this.model.x, this.model.y);
 
-    if (this.draggable.orient === 'is--hor') {
-      this.draggable.currentValue = this.scale(this.newX, 0, this.width - 44, this.draggable.min, this.draggable.max);
-    } else if (this.draggable.orient === 'is--vert') {
-      this.draggable.currentValue = this.scale(this.newY, 0, this.height - 44, this.draggable.min, this.draggable.max);
-    } else if (this.draggable.orient === 'is--joystick') {
-      this.draggable.currentValue = [this.scale(this.newX, 0, this.width - 44, this.draggable.min[0], this.draggable.max[0]),
-        this.scale(this.newY, 0, this.height - 44, this.draggable.min[1], this.draggable.max[1])
+    if (this.model.orient === 'is--hor') {
+      this.model.currentValue = this.scale(this.model.x, 0, this.model.width - 44, this.model.min, this.model.max);
+    } else if (this.model.orient === 'is--vert') {
+      this.model.currentValue = this.scale(this.model.y, 0, this.model.height - 44, this.model.min, this.model.max);
+    } else if (this.model.orient === 'is--joystick') {
+      this.model.currentValue = [this.scale(this.model.x, 0, this.model.width - 44, this.model.min[0], this.model.max[0]),
+        this.scale(this.model.y, 0, this.model.height - 44, this.model.min[1], this.model.max[1])
       ];
     }
 
-    this.draggable.timeStamp = e.timeStamp;
+    this.model.timeStamp = e.timeStamp;
 
-    if (this.draggable.onUpdate) {
+    if (this.onUpdate) {
       this.repeatEvent();
     }
 
@@ -196,33 +167,31 @@ export class NgFxDraggableDirective implements OnInit {
 
   onMouseMove(e) {
 
-    if (this.isActive) {
-      this.handle.style.opacity = '0.5';
-      this.newX = e.offsetX;
-      this.newY = e.offsetY;
+    if (this.model.isActive) {
+      this._handle.style.opacity = '0.5';
+      this.model.x = e.offsetX;
+      this.model.y = e.offsetY;
     }
 
-    if (this.isPositionable && this.isActive) {
+    if (this.model.hasUserInput && this.model.isActive) {
 
-      this.setPosition(this.newX, this.newY);
+      this.setPosition(this.model.x, this.model.y);
 
-      if (this.draggable.orient === 'is--hor') {
-        this.draggable.currentValue = this.scale(this.newX, 0, this.width - 44, this.draggable.min, this.draggable.max);
+      if (this.model.orient === 'is--hor') {
+        this.model.currentValue = this.scale(this.model.x, 0, this.model.width - 44, this.model.min, this.model.max);
       }
-      if (this.draggable.orient === 'is--vert') {
-        this.draggable.currentValue = this.scale(this.newY, 0, this.height - 44, this.draggable.min, this.draggable.max);
+      if (this.model.orient === 'is--vert') {
+        this.model.currentValue = this.scale(this.model.y, 0, this.model.height - 44, this.model.min, this.model.max);
       }
-      if (this.draggable.orient === 'is--joystick') {
-        this.draggable.currentValue = [this.scale(this.newX, 0, this.width - 44, this.draggable.min[0], this.draggable.max[0]),
-          this.scale(this.newY, 0, this.height - 44, this.draggable.min[1], this.draggable.max[1])
+      if (this.model.orient === 'is--joystick') {
+        this.model.currentValue = [this.scale(this.model.x, 0, this.model.width - 44, this.model.min[0], this.model.max[0]),
+          this.scale(this.model.y, 0, this.model.height - 44, this.model.min[1], this.model.max[1])
         ];
       }
 
-      this.draggable.timeStamp = e.timeStamp;
+      this.model.timeStamp = e.timeStamp;
 
-      if (this.draggable.onUpdate) {
-        this.repeatEvent();
-      }
+      this.repeatEvent();
 
     }
 
@@ -231,29 +200,22 @@ export class NgFxDraggableDirective implements OnInit {
   // Unbind drag events
   @HostListener('mouseup', ['$event']) onMouseUp(e) {
 
-    this.isActive = false;
-    this.handle.style.opacity = '';
+    this.model.isActive = false;
+    this._handle.style.opacity = '';
 
     // TODO: set cancel flag? these value just happen to work b/c of current min and max
 
     if ('ontouchstart' in document.documentElement) {
-      this.touchItem = undefined;
+      this._touchItem = null;
     } else {
-      this.elem.removeEventListener('mousemove', this.onMouseMove.bind(this));
-      this.elem.removeEventListener('mouseup', this.onMouseUp.bind(this));
+      this._elem.removeEventListener('mousemove', this.onMouseMove.bind(this));
+      this._elem.removeEventListener('mouseup', this.onMouseUp.bind(this));
     }
 
-
-    //if (this.draggable.onUpdate) {
-      this.draggable.onUpdate.emit({
-                                    type: 'change',
-                                    currentValue: this.draggable.currentValue,
-                                    timeStamp: e.timeStamp,
-                                    ui: {
-                                      position: this.position
-                                    }
-                                  });
-    //}
+    this.onUpdate.emit({
+      type: 'change',
+      control: this.model
+    });
 
     this.cancelMaster = false;
 
@@ -264,34 +226,26 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   repeatEvent() {
-    if (this.draggable.isControlled === false) {
-      clearTimeout(this.timeout);
-    }
-    this.draggable.onUpdate.emit({
-                                    type: 'change',
-                                    currentValue: this.draggable.currentValue,
-                                    timeStamp: this.draggable.timeStamp,
-                                    ui: {
-                                        position: this.position
-                                    }
-                                  });
-    if (this.draggable.isControlled === false && this.draggable.isActive === false) {
-      this.timeout = setTimeout(() => {
-        this.draggable.onUpdate.emit({
-                                        type: 'change',
-                                        endFrame: true,
-                                        control: this.draggable.name,
-                                        currentValue: this.draggable.currentValue,
-                                        timeStamp: this.draggable.timeStamp,
-                                        ui: {
-                                          position: this.position
-                                        }
-                                      });
+
+    clearTimeout(this._timeout);
+    this.onUpdate.emit({
+                        type: 'change',
+                        control: this.model
+                      });
+
+    if (this.model.isActive === false) {
+
+      this._timeout = window.setTimeout(() => {
+            this.onUpdate.emit({
+              type: 'change',
+              endFrame: true,
+              control: this.model
+            });
       }, 300);
+
     }
 
   }
-
 
   // Get Center of Circle
   getCenter(xRange, yRange) {
@@ -304,14 +258,16 @@ export class NgFxDraggableDirective implements OnInit {
 
   // Distance Between Two Points
   distance(dot1, dot2) {
+
     let x1 = dot1[0],
       y1 = dot1[1],
       x2 = dot2[0],
       y2 = dot2[1];
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
   }
 
-  // convert between two ranges, for outputting user value
+  // Convert between two ranges, for outputting user value
 
   scale(v, min, max, gmin, gmax) {
 
@@ -334,7 +290,6 @@ export class NgFxDraggableDirective implements OnInit {
       y = y - center[1];
       let radians = Math.atan2(y, x);
       return [Math.cos(radians) * radius + center[0], Math.sin(radians) * radius + center[1]];
-
     }
 
   }
@@ -346,113 +301,58 @@ export class NgFxDraggableDirective implements OnInit {
   // Move handle, within elem
   setPosition(x, y) {
 
-    if (this.draggable.orient === 'is--joystick') {
+    if (this.model.orient === 'is--joystick') {
 
       if (x <= 0) {
-        this.newX = 0;
-      } else if (x > this.width) {
-        this.newX = this.width;
+        this.model.x = 0;
+      } else if (x > this.model.width) {
+        this.model.x = this.model.width;
       } else {
-        this.newX = x;
+        this.model.x = x;
       }
 
       if (y <= 0) {
-        this.newY = 0;
-      } else if (y > this.height) {
-        this.newY = this.height;
+        this.model.y = 0;
+      } else if (y > this.model.height) {
+        this.model.y = this.model.height;
       } else {
-        this.newY = y;
+        this.model.y = y;
       }
 
+      this._joystickPos = this.circularBounds(this.model.x,
+                                             this.model.y,
+                                             [0, this.model.width - this._handle.offsetWidth],
+                                             [0, this.model.height - this._handle.offsetHeight]);
+      this.model.x = this.clamp(this._joystickPos[0], [0, this.model.width - this._handle.offsetWidth]);
+      this.model.y = this.clamp(this._joystickPos[1], [0, this.model.height - this._handle.offsetHeight]);
 
-      this.joystickPos = this.circularBounds(this.newX,
-                                             this.newY,
-                                             [0, this.width - this.handle.offsetWidth],
-                                             [0, this.height - this.handle.offsetHeight]);
-      this.newX = this.clamp(this.joystickPos[0], [0, this.width - this.handle.offsetWidth]);
-      this.newY = this.clamp(this.joystickPos[1], [0, this.height - this.handle.offsetHeight]);
+      this.model.position = 'translate3d(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ',' + 1 + 'px' + ')';
 
-      // this.draggable.node.translate = [this.newX, this.newY, 1];
-      this.position = 'translate3d(' + this.newX + 'px' + ',' + this.newY + 'px' + ',' + 1 + 'px' + ')';
-      // this.draggable.onUpdate.emit({type: 'sliderPosition', position: [this.newX + 'px', this.newY + 'px', 1 + 'px']});
-      // TODO: figure out why width and height need to be hardcoded.
 
     } else {
 
       if (x <= 0) {
-        this.newX = 0;
-      } else if (x > this.elem.clientWidth - this.handle.offsetWidth) {
-        this.newX = this.elem.clientWidth - this.handle.offsetWidth;
+        this.model.x = 0;
+      } else if (x > this._elem.clientWidth - this._handle.offsetWidth) {
+        this.model.x = this._elem.clientWidth - this._handle.offsetWidth;
       } else {
-        this.newX = x;
+        this.model.x = x;
       }
 
       if (y <= 0) {
-        this.newY = 0;
-      } else if (y > this.elem.clientHeight - this.handle.offsetHeight) {
-        this.newY = this.elem.clientHeight - this.handle.offsetHeight;
+        this.model.y = 0;
+      } else if (y > this._elem.clientHeight - this._handle.offsetHeight) {
+        this.model.y = this._elem.clientHeight - this._handle.offsetHeight;
       } else {
-        this.newY = y;
+        this.model.y = y;
       }
 
-      this.position = 'translate3d(' + this.newX + 'px' + ',' + this.newY + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate3d(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ',' + 1 + 'px' + ')';
 
     }
 
 
   }
-
-  slaveListener() {
-
-    this.draggable.slave.subscribe((control)=>{
-
-      if (control.endFrame === true) {
-        this.draggable.isControlled = false;
-        this.draggable.onSlave.emit({
-                                      type: 'change',
-                                      currentValue: this.draggable.currentValue,
-                                      timeStamp: this.draggable.timeStamp,
-                                      ui: {
-                                        position: this.position
-                                      }
-                                    });
-      } else {
-        if (this.draggable.isControlled === false) {
-          clearTimeout(this.timeout);
-        }
-        this.isActive = true;
-        this.draggable.isControlled = true;
-        this.position = control.ui.position;
-        this.draggable.currentValue = control.currentValue;
-        this.draggable.timeStamp = new Date();
-        this.draggable.onSlave.emit({
-                                      type: 'change',
-                                      currentValue: this.draggable.currentValue,
-                                      timeStamp: this.draggable.timeStamp,
-                                      ui: {
-                                            position: this.position
-                                          }
-                                    });
-        if (!this.draggable.isControlled && !this.draggable.isActive) {
-          this.timeout = setTimeout(() => {
-          this.draggable.onUpdate.emit({
-                                          type: 'change',
-                                          endFrame: true,
-                                          control: this.draggable.name,
-                                          currentValue: this.draggable.currentValue,
-                                          timeStamp: this.draggable.timeStamp,
-                                          ui: {
-                                            position: this.position
-                                          }
-                                        });
-          }, 300);
-        }
-      }
-
-    });
-
-  }
-
 
 
 }

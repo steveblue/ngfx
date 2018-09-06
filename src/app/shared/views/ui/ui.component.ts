@@ -1,4 +1,4 @@
-import { NgFxDraggableOptions } from './../../../lib/ui/src/components/slider/draggable.directive';
+import { NgFxControl } from './../../../lib/ui/src/components/slider/draggable.directive';
 import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
@@ -8,20 +8,18 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 })
 export class UiComponent implements OnInit {
 
-  public vertControl: NgFxDraggableOptions = {
+  public vertControl: NgFxControl = {
     name: 'slider',
     orient: 'is--vert',
     min: 0,
-    max: 255,
-    onUpdate: new EventEmitter()
+    max: 255
   };
 
-  public joyControl: NgFxDraggableOptions = {
+  public joyControl: NgFxControl = {
     name: 'joystick',
     orient: 'is--joystick',
     min: [0, 0],
-    max: [255, 255],
-    onUpdate: new EventEmitter()
+    max: [255, 255]
   };
 
   constructor() { }

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, ElementRef, ChangeDetectorRef, Input, OnInit, HostBinding } from '@angular/core';
-import { NgFxDraggableOptions } from './draggable.directive';
+import { Component, Input, ViewChild } from '@angular/core';
+import { NgFxDraggableDirective, NgFxControl } from './draggable.directive';
 
 @Component({
   selector: 'ngfx-slider',
@@ -7,44 +7,17 @@ import { NgFxDraggableOptions } from './draggable.directive';
   styleUrls: ['slider.component.css']
 })
 
-export class NgFxSliderComponent implements OnInit {
+export class NgFxSliderComponent {
 
-  public transform: string;
+  public model: NgFxControl;
 
-  @Input('options') options: NgFxDraggableOptions;
-  @HostBinding('style.float') float: string;
+  @Input('control') control: NgFxControl;
+  @ViewChild(NgFxDraggableDirective) draggable: NgFxDraggableDirective;
 
-  constructor(private _ref: ChangeDetectorRef,
-              private _elem: ElementRef) {
-
-    this.transform = 'translate3d(0px, 0px, 1px)';
-
-  }
-
-  ngOnInit() {
-
-    if (this.options.float) {
-      this.float = this.options.float;
-    }
-
-    if (this.options.orient === 'is--joystick') {
-      this.transform = 'translate3d(' + 76 + 'px,' + 76 + 'px,' + 1 + 'px)';
-    }
-
-    this.options.onUpdate.subscribe((data) => {
-
-      if (data['ui'] && data['ui']['position']) {
-        this.transform = data['ui']['position'];
-      }
-
-    });
-
-    // TODO: Position with matrix3D transform or use web animations api?
-
-  }
+  constructor() {}
 
   hasName() {
-    return this.options.name !== undefined && this.options.name.length > 0;
+    return this.control.name !== undefined && this.control.name.length > 0;
   }
 
 }

@@ -1,14 +1,14 @@
 <div class="ngfx__slider"
-     [ngClass]="{'is--hor' : options.orient === 'is--hor',
-                 'is--vert' : options.orient === 'is--vert',
-                 'is--joystick' : options.orient === 'is--joystick'}">
+     [ngClass]="{'is--hor' : control.orient === 'is--hor',
+                 'is--vert' : control.orient === 'is--vert',
+                 'is--joystick' : control.orient === 'is--joystick'}">
     <div class="ngfx__slider__title">
-        <h6 [hidden]="!hasName()">{{options.name.charAt(0).toUpperCase()}}</h6>
-        <span class="slave__indicator" [ngClass]="{'is--visible': options.isControlled === true }"></span>
+        <h6 [hidden]="!hasName()">{{control.name.charAt(0).toUpperCase()}}</h6>
+        <span class="slave__indicator" [ngClass]="{'is--visible': control.hasUserInput === true }"></span>
     </div>
-    <div class="ngfx__slider__container" [draggable]="options">
+    <div class="ngfx__slider__container" [draggable]="control">
         <div class="ngfx__slider__range">
-            <div class="ngfx__slider__handle" [ngStyle]="{ transform: transform }"></div>
+            <div class="ngfx__slider__handle" [ngStyle]="{ transform: control.position }"></div>
         </div>
     </div>
 </div>
