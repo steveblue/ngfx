@@ -9,8 +9,6 @@ import { NgFxDraggableDirective, NgFxControl } from './draggable.directive';
 
 export class NgFxSliderComponent {
 
-  public model: NgFxControl;
-
   @Input('control') control: NgFxControl;
   @ViewChild(NgFxDraggableDirective) draggable: NgFxDraggableDirective;
 

@@ -13,7 +13,7 @@ export interface NgFxControl {
   max: number | number[],
   isActive?: boolean,
   hasUserInput?: boolean,
-  currentValue?: number | number[],
+  currentValue?: number | number[] | boolean | string,
   position?: string,
   x?: number,
   y?: number,
@@ -203,8 +203,6 @@ export class NgFxDraggableDirective implements OnInit {
     this.model.isActive = false;
     this._handle.style.opacity = '';
 
-    // TODO: set cancel flag? these value just happen to work b/c of current min and max
-
     if ('ontouchstart' in document.documentElement) {
       this._touchItem = null;
     } else {
@@ -351,8 +349,6 @@ export class NgFxDraggableDirective implements OnInit {
 
     }
 
-
   }
-
 
 }
