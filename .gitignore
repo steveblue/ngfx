@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/closure
 /tmp
 /out-tsc
 /out-css
