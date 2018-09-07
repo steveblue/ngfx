@@ -72,7 +72,7 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   @HostListener('mouseleave', ['$event']) onMouseLeave(e) {
-    this.model.hasUserInput = false;
+    //this.model.hasUserInput = false;
   }
 
   @HostListener('mouseenter', ['$event']) onMouseEnter(e) {
@@ -167,10 +167,14 @@ export class NgFxDraggableDirective implements OnInit {
 
   onMouseMove(e) {
 
-    if (this.model.isActive) {
+    if (this.model.isActive && e.target.parentNode === this._elem) {
       this._handle.style.opacity = '0.5';
       this.model.x = e.offsetX;
       this.model.y = e.offsetY;
+    } else {
+      this._handle.style.opacity = '0.5';
+      this.model.x = (this._elem.getBoundingClientRect().left - e.offsetX) * -1;
+      this.model.y =  (this._elem.getBoundingClientRect().top - e.offsetY) * -1;
     }
 
     if (this.model.hasUserInput && this.model.isActive) {
@@ -201,6 +205,7 @@ export class NgFxDraggableDirective implements OnInit {
   @HostListener('mouseup', ['$event']) onMouseUp(e) {
 
     this.model.isActive = false;
+    this.model.hasUserInput = false;
     this._handle.style.opacity = '';
 
     if ('ontouchstart' in document.documentElement) {
@@ -300,22 +305,6 @@ export class NgFxDraggableDirective implements OnInit {
   setPosition(x, y) {
 
     if (this.model.orient === 'is--joystick') {
-
-      if (x <= 0) {
-        this.model.x = 0;
-      } else if (x > this.model.width) {
-        this.model.x = this.model.width;
-      } else {
-        this.model.x = x;
-      }
-
-      if (y <= 0) {
-        this.model.y = 0;
-      } else if (y > this.model.height) {
-        this.model.y = this.model.height;
-      } else {
-        this.model.y = y;
-      }
 
       this._joystickPos = this.circularBounds(this.model.x,
                                              this.model.y,

@@ -12,23 +12,24 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
 
     .ngfx__slider__title {
       width: 100%;
-      text-align: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
       transform: translateY(-8px);
-      h6 {
+      .control__name {
           color: rgba(255,255,255,0.3);
           font-size: 12px;
           font-weight: 700;
       }
+
     }
 
     .slave__indicator {
-      position: relative;
-      float:right;
       width: 8px;
       height: 8px;
       border-radius: 50% 50%;
       background: rgba(255,255,255,0.5);
-      transform: translateX(2px) translateY(-10px);
+      transform: translateX(4px) translateY(3px);
       display: none;
       &.is--visible {
         display: block;
