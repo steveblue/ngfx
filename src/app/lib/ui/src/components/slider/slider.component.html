@@ -1,12 +1,11 @@
-<div class="ngfx__slider"
-     [ngClass]="{'is--hor' : control.orient === 'is--hor',
+<div class="ngfx__slider" [ngClass]="{'is--hor' : control.orient === 'is--hor',
                  'is--vert' : control.orient === 'is--vert',
                  'is--joystick' : control.orient === 'is--joystick'}">
     <div class="ngfx__slider__title" [hidden]="!hasName()">
         <span class="control__name">{{control.name.charAt(0).toUpperCase()}}</span>
         <span class="slave__indicator" [ngClass]="{'is--visible': control.hasUserInput === true }"></span>
     </div>
-    <div class="ngfx__draggable" [draggable]="control">
+    <div class="ngfx__draggable" ngfxDraggable [control]="control">
         <div class="ngfx__range">
             <div class="ngfx__handle"></div>
         </div>

@@ -8,9 +8,8 @@ describe('UiComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UiComponent ]
-    })
-    .compileComponents();
+      declarations: [UiComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

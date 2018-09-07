@@ -7,7 +7,6 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
   styleUrls: ['./ui.component.scss']
 })
 export class UiComponent implements OnInit {
-
   public vertControl: NgFxControl = {
     name: 'slider',
     orient: 'is--vert',
@@ -29,9 +28,7 @@ export class UiComponent implements OnInit {
     max: [255, 255]
   };
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

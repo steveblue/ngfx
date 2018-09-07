@@ -7,7 +7,6 @@ $md-breakpoint: 768px;
 $lg-breakpoint: 1025px;
 $xl-breakpoint: 1441px;
 
-
 //-----------------------------------------
 //  Media Queries
 //-----------------------------------------
@@ -38,8 +37,6 @@ $xl-breakpoint: 1441px;
   }
 }
 
-
-
 //-----------------------------------------
 //  Font Weight
 //-----------------------------------------
@@ -50,9 +47,8 @@ $xl-breakpoint: 1441px;
 // font anti-aliasing
 %anti-aliasing {
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;  
+  -moz-osx-font-smoothing: grayscale;
 }
-
 
 //-----------------------------------------
 //  Font Size
@@ -70,7 +66,7 @@ $xl-breakpoint: 1441px;
 // Function for converting a px based font-size to rem.
 @function calculate-rem($size) {
   $remSize: $size / 16px;
-//Default font size on html element is 100%, equivalent to 16px;
+  //Default font size on html element is 100%, equivalent to 16px;
   @return #{$remSize}rem;
 }
 
@@ -80,11 +76,9 @@ $xl-breakpoint: 1441px;
   font-size: calculate-rem($size);
 }
 
-
 //-----------------------------------------
 //  Cross Browser CSS Transforms
 //-----------------------------------------
-
 
 @function str-replace($string, $search, $replace: '') {
   $index: str-index($string, $search);
@@ -95,17 +89,16 @@ $xl-breakpoint: 1441px;
 }
 
 @mixin transform2($trans...) {
-  $fallback: unquote(str-replace(str-replace("#{$trans}", '3d', ''), ', 0)', ')'));
+  $fallback: unquote(str-replace(str-replace('#{$trans}', '3d', ''), ', 0)', ')'));
   -ms-transform: $fallback;
-  
+
   $prefixes: (ms, moz, o, webkit);
   @each $prefix in $prefixes {
     #{'-' + $prefix + '-transform'}: $trans;
   }
-  
+
   transform: $trans;
 }
-
 
 //-----------------------------------------
 //  Layout
@@ -113,27 +106,26 @@ $xl-breakpoint: 1441px;
 @mixin vertical-align {
   position: relative;
   top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 @mixin horizontal-align {
   position: relative;
   left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 //-----------------------------------------
 //  clearfix
 //-----------------------------------------
 
-
 @mixin clearfix {
   &:after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -145,13 +137,11 @@ $xl-breakpoint: 1441px;
 
 @mixin ul-reset() {
   padding: 0;
-	margin: 0;
+  margin: 0;
   list-style: none;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px;
   -webkit-padding-start: 0px;
   -webkit-margin-before: 0px;
   -webkit-margin-after: 0px;
-
 }
-

@@ -8,9 +8,8 @@ describe('RtcComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RtcComponent ]
-    })
-    .compileComponents();
+      declarations: [RtcComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

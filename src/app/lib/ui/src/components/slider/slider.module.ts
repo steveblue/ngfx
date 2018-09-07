@@ -7,11 +7,8 @@ export * from './draggable.directive';
 export * from './slider.component';
 
 @NgModule({
-    imports: [ CommonModule ],
-    declarations: [ NgFxDraggableDirective,
-                    NgFxSliderComponent ],
-    exports: [  NgFxDraggableDirective,
-                NgFxSliderComponent ]
+  imports: [CommonModule],
+  declarations: [NgFxDraggableDirective, NgFxSliderComponent],
+  exports: [NgFxDraggableDirective, NgFxSliderComponent]
 })
-
 export class NgFxSliderModule {}

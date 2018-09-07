@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RtcComponent } from './rtc.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [RtcComponent]
 })
-export class RtcModule { }
+export class RtcModule {}

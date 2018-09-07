@@ -4,10 +4,7 @@ import { UiComponent } from './ui.component';
 import { NgFxSliderModule } from './../../../lib/ui/src/components/slider/slider.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    NgFxSliderModule
-  ],
+  imports: [CommonModule, NgFxSliderModule],
   declarations: [UiComponent]
 })
-export class UiModule { }
+export class UiModule {}
