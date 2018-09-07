@@ -22,6 +22,13 @@ export class UiComponent implements OnInit {
     max: [255, 255]
   };
 
+  public joyControl2: NgFxControl = {
+    name: 'joystick',
+    orient: 'is--hor',
+    min: [0, 0],
+    max: [255, 255]
+  };
+
   constructor() { }
 
   ngOnInit() {

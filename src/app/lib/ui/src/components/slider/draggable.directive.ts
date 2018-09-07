@@ -34,6 +34,8 @@ export class NgFxDraggableDirective implements OnInit {
   private _elem: HTMLElement;
   private _handle: HTMLElement;
   private _timeout: number;
+  private _animation: Animation;
+  private _lastPos: AnimationKeyFrame;
   public cancelMaster: boolean;
   public onUpdate: EventEmitter<NgFxEvent>;
 
@@ -48,7 +50,7 @@ export class NgFxDraggableDirective implements OnInit {
 
   ngOnInit() {
 
-    let nodeList: HTMLElement[] = (<HTMLElement[]> <any> this._elem.getElementsByClassName('ngfx__slider__handle'));
+    let nodeList: HTMLElement[] = (<HTMLElement[]> <any> this._elem.getElementsByClassName('ngfx__handle'));
 
     this._touchItem = null;
     this._handle = nodeList[0];
@@ -57,16 +59,17 @@ export class NgFxDraggableDirective implements OnInit {
 
     if (this.model.orient === 'is--hor') {
       this.model.currentValue = 0;
-      this.model.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate(' + 0 + 'px' + ',' + 0 + 'px' + ')';
     } else if (this.model.orient === 'is--vert') {
       this.model.currentValue = 0;
-      this.model.position = 'translate3d(' + 0 + 'px' + ',' + 0 + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate(' + 0 + 'px' + ',' + 0 + 'px' + ')';
     } else if (this.model.orient === 'is--joystick') {
       this.model.currentValue = [0,0];
       this.model.x = this.model.y = 76;
-      this.model.position = 'translate3d(' + 76 + 'px' + ',' + 76 + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate(' + 76 + 'px' + ',' + 76 + 'px' + ')';
     }
-
+    this._lastPos = { transform: this.model.position };
+    this.setActualPosition(this.model.position);
     // TODO init based on this.model.currentValue
 
   }
@@ -301,6 +304,18 @@ export class NgFxDraggableDirective implements OnInit {
     return Math.max(Math.min(value, range[1]), range[0]);
   }
 
+  setActualPosition(pos) {
+
+    const options = (): AnimationEffectTiming => ({
+      duration: 4,
+      fill: 'forwards'
+    })
+
+    this._animation = this._handle.animate([this._lastPos, {transform: pos}], options());
+    this._lastPos = {transform: pos};
+
+  }
+
   // Move handle, within elem
   setPosition(x, y) {
 
@@ -313,7 +328,8 @@ export class NgFxDraggableDirective implements OnInit {
       this.model.x = this.clamp(this._joystickPos[0], [0, this.model.width - this._handle.offsetWidth]);
       this.model.y = this.clamp(this._joystickPos[1], [0, this.model.height - this._handle.offsetHeight]);
 
-      this.model.position = 'translate3d(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ')';
+      this.setActualPosition(this.model.position);
 
 
     } else {
@@ -334,7 +350,8 @@ export class NgFxDraggableDirective implements OnInit {
         this.model.y = y;
       }
 
-      this.model.position = 'translate3d(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ',' + 1 + 'px' + ')';
+      this.model.position = 'translate(' + this.model.x + 'px' + ',' + this.model.y + 'px' + ')';
+      this.setActualPosition(this.model.position);
 
     }
 

@@ -6,9 +6,9 @@
         <span class="control__name">{{control.name.charAt(0).toUpperCase()}}</span>
         <span class="slave__indicator" [ngClass]="{'is--visible': control.hasUserInput === true }"></span>
     </div>
-    <div class="ngfx__slider__container" [draggable]="control">
-        <div class="ngfx__slider__range">
-            <div class="ngfx__slider__handle" [ngStyle]="{ transform: control.position }"></div>
+    <div class="ngfx__draggable" [draggable]="control">
+        <div class="ngfx__range">
+            <div class="ngfx__handle"></div>
         </div>
     </div>
 </div>

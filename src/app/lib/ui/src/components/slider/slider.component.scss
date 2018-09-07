@@ -21,36 +21,31 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
           font-size: 12px;
           font-weight: 700;
       }
-
-    }
-
-    .slave__indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50% 50%;
-      background: rgba(255,255,255,0.5);
-      transform: translateX(4px) translateY(3px);
-      display: none;
-      &.is--visible {
-        display: block;
+      .slave__indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50% 50%;
+        background: rgba(255,255,255,0.5);
+        transform: translateX(4px) translateY(3px);
+        display: none;
+        &.is--visible {
+          display: block;
+        }
       }
+
     }
 
-    .ngfx__slider__container {
+    .ngfx__draggable {
       display: block;
-      transform: translateZ(0);
       z-index: 1000;
       border: 2px solid rgba(255,255,255,0.3);
       border-radius: 12px;
-      transition: 0.125s all cubic-bezier(0.23, 1, 0.320, 1);
-
-      .ngfx__slider__range {
+      .ngfx__range {
         width: 100%;
         height: 100%;
         overflow: hidden;
-
       }
-      .ngfx__slider__handle {
+      .ngfx__handle {
         width: 32px;
         height: 32px;
         border-radius: 50%;
@@ -64,39 +59,44 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
     &.is--hor {
         width: 200px;
         height: 32px;
-      .ngfx__slider__container {
-        width: 200px;
-        height: 32px;
-        border-radius: 14px;
-         cursor: $handle-bg 22 22, pointer;
-        .ngfx__slider__handle {
-          background: $hor-icon;
-        }
+      .ngfx__draggable {
+          width: 200px;
+          height: 32px;
+          border-radius: 14px;
+          cursor: $handle-bg 22 22, pointer;
+          .ngfx__handle {
+            background: $hor-icon;
+            background-size: 44px 32px;
+            background-position: 50% 0px;
+            opacity: 0.5;
+          }
       }
     }
     &.is--vert {
         width: 32px;
         height: 200px;
-      .ngfx__slider__container {
-        width: 32px;
-        height: 200px;
-        border-radius: 14px;
-        cursor: $handle-bg 22 0, pointer;
-        .ngfx__slider__handle {
-          background: $vert-icon;
-        }
+      .ngfx__draggable {
+          width: 32px;
+          height: 200px;
+          border-radius: 14px;
+          cursor: $handle-bg 22 0, pointer;
+          .ngfx__handle {
+            background: $vert-icon;
+            background-size: 32px 44px;
+            background-position: 0px 50%;
+            opacity: 0.5;
+          }
       }
     }
     &.is--joystick {
        width: 200px;
        height: 200px;
-      .ngfx__slider__container {
+      .ngfx__draggable {
         width: 200px;
         height: 200px;
         border-radius: 50%;
-
         cursor: $handle-bg 0 0, pointer;
-        .ngfx__slider__handle {
+        .ngfx__handle {
           position: absolute;
           background-size: 44px 44px;
           width: 44px;
