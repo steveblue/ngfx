@@ -98,8 +98,6 @@ export class NgFxDraggableDirective implements OnInit {
     this._rect = this._elem.getBoundingClientRect();
     this.control.height = this._elem.clientHeight;
     this.control.width = this._elem.clientWidth;
-    this.control.x = e.touches[this._touchItem].pageX - this._rect.left - this._handle.clientWidth / 2;
-    this.control.y = e.touches[this._touchItem].pageY - this._rect.top - this._handle.clientWidth / 2;
 
     this._elem.addEventListener('touchmove', this.onTouchMove.bind(this));
     this._elem.addEventListener('touchend', this.onMouseUp.bind(this));
@@ -108,6 +106,9 @@ export class NgFxDraggableDirective implements OnInit {
       // make this touch = the latest touch in the touches list instead of using event
       this._touchItem = e.touches.length - 1;
     }
+
+    this.control.x = e.touches[this._touchItem].pageX - this._rect.left - this._handle.clientWidth / 2;
+    this.control.y = e.touches[this._touchItem].pageY - this._rect.top - this._handle.clientWidth / 2;
 
     this.setPosition(this.control.x, this.control.y);
   }
@@ -173,9 +174,7 @@ export class NgFxDraggableDirective implements OnInit {
 
     this.control.timeStamp = e.timeStamp;
 
-    if (this.onUpdate) {
-      this.repeatEvent();
-    }
+    this.repeatEvent();
   }
 
   onMouseMove(e: MouseEvent) {
@@ -239,11 +238,6 @@ export class NgFxDraggableDirective implements OnInit {
       this._elem.removeEventListener('mouseup', this.onMouseUp.bind(this));
     }
 
-    this.onUpdate.emit({
-      type: 'change',
-      control: this.control
-    });
-
     if (this.control.orient === 'is--joystick' && this.control.snapToCenter === true) {
       const center = this.getCenter(
         [0, this.control.width - this._handle.offsetWidth],
@@ -253,6 +247,11 @@ export class NgFxDraggableDirective implements OnInit {
       this.control.y = center[1];
       this.setPosition(center[0], center[1]);
     }
+
+    this.onUpdate.emit({
+      type: 'change',
+      control: this.control
+    });
 
     this.cancelMaster = false;
   }
@@ -326,13 +325,9 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   setActualPosition(pos: string) {
-    const options = (): AnimationEffectTiming => ({
-      duration: 4,
-      fill: 'forwards'
-    });
-
-    this._animation = this._handle['animate']([this._lastPos, { transform: pos }], options());
-    this._lastPos = { transform: pos };
+    const transformRegex = new RegExp(/(\d+(\.\d+)?)/g);
+    const positions = pos.match(transformRegex);
+    this._handle.style.transform = 'matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,' + positions[0] + ',' + positions[1] + ',0,1)';
   }
 
   // Move handle, within elem
@@ -369,10 +364,6 @@ export class NgFxDraggableDirective implements OnInit {
 
       this.control.position = 'translate(' + this.control.x + 'px' + ',' + this.control.y + 'px' + ')';
       this.setActualPosition(this.control.position);
-      this.onUpdate.emit({
-        type: 'change',
-        control: this.control
-      });
     }
   }
 }

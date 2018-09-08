@@ -25,15 +25,11 @@ export class UiComponent implements OnInit {
   public joyControl2: NgFxControl = {
     name: 'h',
     orient: 'is--hor',
-    min: [0, 0],
-    max: [255, 255]
+    min: 0,
+    max: 1000
   };
 
   constructor() {}
 
   ngOnInit() {}
-
-  onControlEmit(ev: NgFxEvent) {
-    console.log(ev);
-  }
 }
