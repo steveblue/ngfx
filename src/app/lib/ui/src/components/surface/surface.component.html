@@ -1,0 +1,5 @@
+<div class="control__group">
+  <div class="control__pane" *ngFor="let control of controlMap">
+    <ngfx-slider *ngIf="control.type === 'slider'" [control]="control"></ngfx-slider>
+  </div>
+</div>

@@ -1,5 +1,7 @@
-import { NgFxControl, NgFxEvent } from './../../../lib/ui/src/components/slider/draggable.directive';
 import { Component, OnInit, EventEmitter } from '@angular/core';
+import { NgFxControl } from './../../../lib/ui/src/interfaces/control';
+import { NgFxEvent } from './../../../lib/ui/src/interfaces/event';
+import { NgFxController } from '../../../lib/ui/src/services/controller/controller.service';
 
 @Component({
   selector: 'app-ui',
@@ -7,29 +9,38 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
   styleUrls: ['./ui.component.scss']
 })
 export class UiComponent implements OnInit {
-  public vertControl: NgFxControl = {
-    name: 'slider',
-    orient: 'is--vert',
-    min: 0,
-    max: 255
-  };
+  constructor(public controller: NgFxController) {
+    // TODO: test with fetching initial data, then hook up with DataChannel
+    this.controller.createSurface('testControls', {
+      vertControl: {
+        type: 'slider',
+        name: 'slider',
+        orient: 'is--vert',
+        min: 0,
+        max: 255
+      },
+      joyControl: {
+        type: 'slider',
+        name: 'joystick',
+        orient: 'is--joystick',
+        min: [0, 0],
+        max: [255, 255],
+        snapToCenter: true
+      },
+      joyControl2: {
+        type: 'slider',
+        name: 'h',
+        orient: 'is--hor',
+        min: 0,
+        max: 1000
+      }
+    });
+  }
 
-  public joyControl: NgFxControl = {
-    name: 'joystick',
-    orient: 'is--joystick',
-    min: [0, 0],
-    max: [255, 255],
-    snapToCenter: true
-  };
-
-  public joyControl2: NgFxControl = {
-    name: 'h',
-    orient: 'is--hor',
-    min: 0,
-    max: 1000
-  };
-
-  constructor() {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    // TODO: move to service or find another way to combine DataChannel
+    this.controller.onEvent.subscribe((ev: NgFxEvent) => {
+      console.log(ev.control.name, ev.control.currentValue);
+    });
+  }
 }

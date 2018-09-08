@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { NgFxDraggableDirective, NgFxControl } from './draggable.directive';
+import { NgFxControl } from './../../interfaces/control';
+import { NgFxDraggableDirective } from './draggable.directive';
 
 @Component({
   selector: 'ngfx-slider',

@@ -1,27 +1,7 @@
 import { Directive, ElementRef, Input, OnInit, HostListener, EventEmitter } from '@angular/core';
-
-export interface NgFxEvent {
-  type: string;
-  endFrame?: boolean;
-  control: NgFxControl;
-}
-
-export interface NgFxControl {
-  name: string;
-  orient: string;
-  min: number | number[];
-  max: number | number[];
-  isActive?: boolean;
-  hasUserInput?: boolean;
-  currentValue?: number | number[] | boolean | string;
-  position?: string;
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-  timeStamp?: Date | number;
-  snapToCenter?: boolean;
-}
+import { NgFxControl } from './../../interfaces/control';
+import { NgFxEvent } from './../../interfaces/event';
+import { NgFxController } from './../../services/controller/controller.service';
 
 @Directive({
   selector: '[ngfxDraggable]'
@@ -36,14 +16,13 @@ export class NgFxDraggableDirective implements OnInit {
   private _animation: Animation;
   private _lastPos: AnimationKeyFrame;
   public cancelMaster: boolean;
-  public onUpdate: EventEmitter<NgFxEvent>;
 
   @Input('control')
   control: NgFxControl;
 
-  constructor(private _el: ElementRef) {
+  constructor(private _el: ElementRef, private _controller: NgFxController) {
     this._elem = _el.nativeElement;
-    this.onUpdate = new EventEmitter();
+    this.cancelMaster = true;
   }
 
   ngOnInit() {
@@ -133,6 +112,8 @@ export class NgFxDraggableDirective implements OnInit {
 
     this.setPosition(this.control.x, this.control.y);
   }
+
+  // TODO: figure out why correct currentValue is not being set
 
   // Handle drag event
   onTouchMove(e: TouchEvent) {
@@ -248,7 +229,7 @@ export class NgFxDraggableDirective implements OnInit {
       this.setPosition(center[0], center[1]);
     }
 
-    this.onUpdate.emit({
+    this._controller.onEvent.emit({
       type: 'change',
       control: this.control
     });
@@ -263,14 +244,14 @@ export class NgFxDraggableDirective implements OnInit {
 
   repeatEvent() {
     clearTimeout(this._timeout);
-    this.onUpdate.emit({
+    this._controller.onEvent.emit({
       type: 'change',
       control: this.control
     });
 
     if (this.control.isActive === false) {
       this._timeout = window.setTimeout(() => {
-        this.onUpdate.emit({
+        this._controller.onEvent.emit({
           type: 'change',
           endFrame: true,
           control: this.control
