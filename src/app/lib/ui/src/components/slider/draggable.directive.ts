@@ -331,7 +331,7 @@ export class NgFxDraggableDirective implements OnInit {
       fill: 'forwards'
     });
 
-    this._animation = this._handle.animate([this._lastPos, { transform: pos }], options());
+    this._animation = this._handle['animate']([this._lastPos, { transform: pos }], options());
     this._lastPos = { transform: pos };
   }
 
