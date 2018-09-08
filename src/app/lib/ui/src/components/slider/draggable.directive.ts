@@ -19,7 +19,8 @@ export interface NgFxControl {
   y?: number;
   height?: number;
   width?: number;
-  timeStamp?: Date;
+  timeStamp?: Date | number;
+  snapToCenter?: boolean;
 }
 
 @Directive({
@@ -70,12 +71,12 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   @HostListener('mouseleave', ['$event'])
-  onMouseLeave(e) {
+  onMouseLeave(e: MouseEvent) {
     // this.control.hasUserInput = false;
   }
 
   @HostListener('mouseenter', ['$event'])
-  onMouseEnter(e) {
+  onMouseEnter(e: MouseEvent) {
     if (this.control.isActive) {
       this.control.hasUserInput = true;
       this.cancelMaster = true;
@@ -83,13 +84,12 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   @HostListener('touchstart', ['$event'])
-  onTouchStart(e) {
+  onTouchStart(e: TouchEvent) {
     this.cancelMaster = true;
-    this.onMouseDown(e);
+    this.onTouchDown(e);
   }
 
-  @HostListener('mousedown', ['$event'])
-  onMouseDown(e) {
+  onTouchDown(e: TouchEvent) {
     e.preventDefault();
 
     this.control.isActive = true;
@@ -98,37 +98,43 @@ export class NgFxDraggableDirective implements OnInit {
     this._rect = this._elem.getBoundingClientRect();
     this.control.height = this._elem.clientHeight;
     this.control.width = this._elem.clientWidth;
+    this.control.x = e.touches[this._touchItem].pageX - this._rect.left - this._handle.clientWidth / 2;
+    this.control.y = e.touches[this._touchItem].pageY - this._rect.top - this._handle.clientWidth / 2;
 
-    if ('ontouchstart' in document.documentElement) {
-      this._elem.addEventListener('touchmove', this.onTouchMove.bind(this));
-      this._elem.addEventListener('touchend', this.onMouseUp.bind(this));
-    } else {
-      this._elem.addEventListener('mousemove', this.onMouseMove.bind(this));
-      this._elem.addEventListener('mouseup', this.onMouseUp.bind(this));
-      window.addEventListener('mousemove', this.onMouseMove.bind(this));
-      window.addEventListener('mouseup', this.onMouseUp.bind(this));
-    }
+    this._elem.addEventListener('touchmove', this.onTouchMove.bind(this));
+    this._elem.addEventListener('touchend', this.onMouseUp.bind(this));
 
-    if ('ontouchstart' in document.documentElement) {
-      e.preventDefault();
-
-      if (this._touchItem === null) {
-        // make this touch = the latest touch in the touches list instead of using event
-        this._touchItem = e.touches.length - 1;
-      }
-
-      this.control.x = e.touches[this._touchItem].pageX - this._rect.left - this._handle.clientWidth / 2;
-      this.control.y = e.touches[this._touchItem].pageY - this._rect.top - this._handle.clientWidth / 2;
-    } else {
-      this.control.x = e.offsetX;
-      this.control.y = e.offsetY;
+    if (this._touchItem === null) {
+      // make this touch = the latest touch in the touches list instead of using event
+      this._touchItem = e.touches.length - 1;
     }
 
     this.setPosition(this.control.x, this.control.y);
   }
 
+  @HostListener('mousedown', ['$event'])
+  onMouseDown(e: MouseEvent) {
+    e.preventDefault();
+
+    this.control.isActive = true;
+    this.control.hasUserInput = true;
+
+    this._rect = this._elem.getBoundingClientRect();
+    this.control.height = this._elem.clientHeight;
+    this.control.width = this._elem.clientWidth;
+    this.control.x = e.offsetX;
+    this.control.y = e.offsetY;
+
+    this._elem.addEventListener('mousemove', this.onMouseMove.bind(this));
+    this._elem.addEventListener('mouseup', this.onMouseUp.bind(this));
+    window.addEventListener('mousemove', this.onMouseMove.bind(this));
+    window.addEventListener('mouseup', this.onMouseUp.bind(this));
+
+    this.setPosition(this.control.x, this.control.y);
+  }
+
   // Handle drag event
-  onTouchMove(e) {
+  onTouchMove(e: TouchEvent) {
     e.preventDefault();
 
     this._handle.style.opacity = '0.5';
@@ -143,9 +149,21 @@ export class NgFxDraggableDirective implements OnInit {
     this.setPosition(this.control.x, this.control.y);
 
     if (this.control.orient === 'is--hor') {
-      this.control.currentValue = this.scale(this.control.x, 0, this.control.width - 44, this.control.min, this.control.max);
+      this.control.currentValue = this.scale(
+        this.control.x,
+        0,
+        this.control.width - 44,
+        <number>this.control.min,
+        <number>this.control.max
+      );
     } else if (this.control.orient === 'is--vert') {
-      this.control.currentValue = this.scale(this.control.y, 0, this.control.height - 44, this.control.min, this.control.max);
+      this.control.currentValue = this.scale(
+        this.control.y,
+        0,
+        this.control.height - 44,
+        <number>this.control.min,
+        <number>this.control.max
+      );
     } else if (this.control.orient === 'is--joystick') {
       this.control.currentValue = [
         this.scale(this.control.x, 0, this.control.width - 44, this.control.min[0], this.control.max[0]),
@@ -160,8 +178,10 @@ export class NgFxDraggableDirective implements OnInit {
     }
   }
 
-  onMouseMove(e) {
-    if (this.control.isActive && e.target.parentNode === this._elem) {
+  onMouseMove(e: MouseEvent) {
+    const parent = <HTMLElement>(<HTMLElement>e.target).parentNode;
+
+    if (this.control.isActive && parent === this._elem) {
       this._handle.style.opacity = '0.5';
       this.control.x = e.offsetX;
       this.control.y = e.offsetY;
@@ -175,10 +195,22 @@ export class NgFxDraggableDirective implements OnInit {
       this.setPosition(this.control.x, this.control.y);
 
       if (this.control.orient === 'is--hor') {
-        this.control.currentValue = this.scale(this.control.x, 0, this.control.width - 44, this.control.min, this.control.max);
+        this.control.currentValue = this.scale(
+          this.control.x,
+          0,
+          this.control.width - 44,
+          <number>this.control.min,
+          <number>this.control.max
+        );
       }
       if (this.control.orient === 'is--vert') {
-        this.control.currentValue = this.scale(this.control.y, 0, this.control.height - 44, this.control.min, this.control.max);
+        this.control.currentValue = this.scale(
+          this.control.y,
+          0,
+          this.control.height - 44,
+          <number>this.control.min,
+          <number>this.control.max
+        );
       }
       if (this.control.orient === 'is--joystick') {
         this.control.currentValue = [
@@ -195,7 +227,7 @@ export class NgFxDraggableDirective implements OnInit {
 
   // Unbind drag events
   @HostListener('mouseup', ['$event'])
-  onMouseUp(e) {
+  onMouseUp(e: MouseEvent | TouchEvent) {
     this.control.isActive = false;
     this.control.hasUserInput = false;
     this._handle.style.opacity = '';
@@ -212,11 +244,21 @@ export class NgFxDraggableDirective implements OnInit {
       control: this.control
     });
 
+    if (this.control.orient === 'is--joystick' && this.control.snapToCenter === true) {
+      const center = this.getCenter(
+        [0, this.control.width - this._handle.offsetWidth],
+        [0, this.control.height - this._handle.offsetHeight]
+      );
+      this.control.x = center[0];
+      this.control.y = center[1];
+      this.setPosition(center[0], center[1]);
+    }
+
     this.cancelMaster = false;
   }
 
   @HostListener('touchend', ['$event'])
-  onTouchEnd(e) {
+  onTouchEnd(e: TouchEvent) {
     this.onMouseUp(e);
   }
 
@@ -239,14 +281,16 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   // Get Center of Circle
-  getCenter(xRange, yRange) {
+
+  getCenter(xRange: number[], yRange: number[]) {
     const cX = xRange[1] - (xRange[1] - xRange[0]) / 2;
     const cY = yRange[1] - (yRange[1] - yRange[0]) / 2;
     return [cX, cY];
   }
 
   // Distance Between Two Points
-  distance(dot1, dot2) {
+
+  distance(dot1: number[], dot2: number[]) {
     const x1 = dot1[0],
       y1 = dot1[1],
       x2 = dot2[0],
@@ -256,13 +300,13 @@ export class NgFxDraggableDirective implements OnInit {
 
   // Convert between two ranges, for outputting user value
 
-  scale(v, min, max, gmin, gmax) {
+  scale(v: number, min: number, max: number, gmin: number, gmax: number) {
     return ((v - min) / (max - min)) * (gmax - gmin) + gmin;
   }
 
   // Find if cursor is within radius of elem
 
-  circularBounds(x, y, xRange, yRange) {
+  circularBounds(x: number, y: number, xRange: number[], yRange: number[]) {
     const center = this.getCenter(xRange, yRange);
     const dist = this.distance([x, y], center);
     const radius = xRange[1] - center[0];
@@ -281,18 +325,19 @@ export class NgFxDraggableDirective implements OnInit {
     return Math.max(Math.min(value, range[1]), range[0]);
   }
 
-  setActualPosition(pos) {
+  setActualPosition(pos: string) {
     const options = (): AnimationEffectTiming => ({
       duration: 4,
       fill: 'forwards'
     });
 
-    this._animation = this._handle['animate']([this._lastPos, { transform: pos }], options());
+    this._animation = this._handle.animate([this._lastPos, { transform: pos }], options());
     this._lastPos = { transform: pos };
   }
 
   // Move handle, within elem
-  setPosition(x, y) {
+
+  setPosition(x: number, y: number) {
     if (this.control.orient === 'is--joystick') {
       this._joystickPos = this.circularBounds(
         this.control.x,
@@ -324,6 +369,10 @@ export class NgFxDraggableDirective implements OnInit {
 
       this.control.position = 'translate(' + this.control.x + 'px' + ',' + this.control.y + 'px' + ')';
       this.setActualPosition(this.control.position);
+      this.onUpdate.emit({
+        type: 'change',
+        control: this.control
+      });
     }
   }
 }

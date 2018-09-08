@@ -1,4 +1,4 @@
-import { NgFxControl } from './../../../lib/ui/src/components/slider/draggable.directive';
+import { NgFxControl, NgFxEvent } from './../../../lib/ui/src/components/slider/draggable.directive';
 import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
@@ -18,11 +18,12 @@ export class UiComponent implements OnInit {
     name: 'joystick',
     orient: 'is--joystick',
     min: [0, 0],
-    max: [255, 255]
+    max: [255, 255],
+    snapToCenter: true
   };
 
   public joyControl2: NgFxControl = {
-    name: 'joystick',
+    name: 'h',
     orient: 'is--hor',
     min: [0, 0],
     max: [255, 255]
@@ -31,4 +32,8 @@ export class UiComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  onControlEmit(ev: NgFxEvent) {
+    console.log(ev);
+  }
 }
