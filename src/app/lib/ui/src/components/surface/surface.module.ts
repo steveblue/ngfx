@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NgfxSurfaceComponent } from './surface.component';
 import { NgFxSliderModule } from './../slider/slider.module';
 
+export * from './surface.component';
+
 @NgModule({
   imports: [CommonModule, NgFxSliderModule],
   declarations: [NgfxSurfaceComponent],
