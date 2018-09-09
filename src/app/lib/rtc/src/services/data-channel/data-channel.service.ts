@@ -129,9 +129,10 @@ export class NgFxDataChannel {
     this.emitter = new EventEmitter();
     this.messages = new EventEmitter();
     this.observer = new Observable(observer => (this.channelObserver = observer)).pipe(share());
+    this.observer.subscribe();
 
     // this.ws.onopen = (msg) => { this.sendSignal(msg.data) };
-    this.announce.onopen = this.sendAnnounce.bind(this);
+    // this.announce.onopen = this.sendAnnounce.bind(this);
     // this.sendAnnounce();
   }
 
@@ -293,7 +294,6 @@ export class NgFxDataChannel {
   }
 
   onCandidateSignal(msg) {
-    // console.warn(msg, this.id, msg.sender);
     const candidate = new (<any>window).RTCIceCandidate(msg);
 
     if (this.debug) {
@@ -336,12 +336,16 @@ export class NgFxDataChannel {
   }
 
   onICEStateChange() {
-    // console.warn(this.peerConnection.iceConnectionState);
     if (this.peerConnection.iceConnectionState === 'disconnected') {
+      Object.keys(this.connections).filter((key: string) => {
+        if (!this.connections[key].isConnected) {
+          delete this.connections[key];
+        }
+      });
       if (this.debug) {
         console.log('Client disconnected!');
       }
-      this.sendAnnounce();
+      // this.sendAnnounce();
     }
   }
 
@@ -383,14 +387,13 @@ export class NgFxDataChannel {
   }
 
   onDataChannelMessage(ev) {
-    const msg = JSON.parse(ev.data);
-
-    this.store.messages.push({
-      id: this.count++,
-      data: JSON.parse(msg.data),
-      sender: msg.sender,
-      createdAt: new Date()
-    });
+    // this.store.messages.push({
+    //   id: this.count++,
+    //   event: ev,
+    //   sender: ev.sender,
+    //   createdAt: new Date()
+    // });
+    this.store.messages.push(JSON.parse(ev.data));
     this.messages.emit(this.store.messages[this.store.messages.length - 1]);
     this.channelObserver.next(this.store.messages);
     if (this.debug) {
