@@ -67,10 +67,6 @@ export class NgFxDataChannel {
   };
 
   constructor(@Inject(NgFxDataChannelConfigService) private config) {
-    // let self = this;
-
-    // firebase.initializeApp(FirebaseConfig);
-
     this.config = config
       ? config
       : {
@@ -84,9 +80,7 @@ export class NgFxDataChannel {
     this.id = this.config.id || uuid(); // unique id that makes each peer => make uuid?
     this.key = this.config.key || createKey(); // the room name.
     this.url = this.config.signalServer; // replace with your server name
-    this.name = 'channel'; // the name of the channel
-    // this.db = firebase.database().ref(); //new Firebase(this.url);
-    // only supports Firebase for now, support for custom web socket server in the future.
+
     this.ws = new WebSocket(this.config.signalServer);
     this.announce = new WebSocket(this.config.announceServer);
     this.wss = new WebSocket(this.config.messageServer);
@@ -115,16 +109,8 @@ export class NgFxDataChannel {
       ordered: false
     };
 
-    // this.channels = {
-    //   announce: this.db.child('announce'),
-    //   signal: this.db.child('messages').child(this.id)
-    // };
-
     this.ws.onmessage = msg => this.onSignal(msg);
     this.announce.onmessage = msg => this.onAnnounce(msg);
-
-    // this.channels.signal.on('child_added', this.onSignal.bind(self));
-    // this.channels.announce.on('child_added', this.onAnnounce.bind(self));
 
     this.emitter = new EventEmitter();
     this.messages = new EventEmitter();
@@ -149,22 +135,9 @@ export class NgFxDataChannel {
     this.announce.send(JSON.stringify(msg));
 
     if (this.debug) {
-      console.log('Announced our sharedKey is ' + this.key);
+      console.log('announced our shared key is ' + this.key);
+      console.log('announced our id is ' + this.id);
     }
-    if (this.debug) {
-      console.log('Announced our ID is ' + this.id);
-    }
-
-    // this.channels.announce.remove(() => {
-    //   this.channels.announce.push(msg);
-    //   if (this.debug) {
-    //     console.log('Announced our sharedKey is ' + this.room);
-    //   }
-    //   if (this.debug) {
-    //     console.log('Announced our ID is ' + this.id);
-    //   }
-
-    // });
   }
 
   onAnnounce(snapshot) {
@@ -172,7 +145,7 @@ export class NgFxDataChannel {
 
     if (msg.id !== this.id && msg.sharedKey === this.key) {
       if (this.debug) {
-        console.log('Discovered matching ' + msg.method + ' announcement from ' + msg.id);
+        console.log('discovered matching ' + msg.method + ' announcement from ' + msg.id);
       }
 
       if (msg.method !== 'socket') {
@@ -193,7 +166,19 @@ export class NgFxDataChannel {
 
       if (msg.method === 'webrtc') {
         this.init(msg);
-        this.connect(msg);
+        this.connections[msg.id].peerConnection.onicecandidate = this.onICECandidate.bind(this);
+        this.connections[msg.id].peerConnection
+          .createOffer()
+          .then(offer => {
+            this.connections[msg.id].peerConnection.setLocalDescription(offer);
+            if (this.debug) {
+              console.warn('sending offer');
+            }
+            this.sendSignal(offer.toJSON());
+          })
+          .catch(err => {
+            console.error('Could not create offer', err);
+          });
       } else {
         this.sendSignal({
           id: this.id,
@@ -214,15 +199,12 @@ export class NgFxDataChannel {
     if (Object.keys(this.connections).length > 0) {
       for (const prop of Object.keys(this.connections)) {
         if (this.connections[prop].isWebSocket) {
-          // TODO: figure out why signaling is broken here
           this.addWSPeer(this.connections[prop]);
           this.initSocket(this.connections[prop]);
         }
-
         this.ws.send(JSON.stringify(msg));
-
         if (this.debug) {
-          console.log('Sending offer from ' + this.id + ' to ' + this.connections[prop].id);
+          console.log('sending offer from ' + this.id + ' to ' + this.connections[prop].id);
         }
       }
     }
@@ -232,38 +214,33 @@ export class NgFxDataChannel {
     if (this.connections[msg.id].isNegotiating) {
       return;
     }
-    if (this.debug) {
-      console.warn('receiving offer', msg.id, this.connections[msg.id]);
-    }
+
     const RTCSessionDescription = (<any>window).RTCSessionDescription || (<any>window).mozRTCSessionDescription;
     this.connections[msg.id].hasPulse = true;
 
     if (this.debug) {
-      console.log('Client has pulse');
+      console.warn('receiving offer', msg.id, this.connections[msg.id]);
+      console.log('client has pulse');
     }
 
     this.connections[msg.id].isNegotiating = true;
 
     if (RTCSessionDescription) {
-      this.connections[msg.id].peerConnection.setRemoteDescription(new RTCSessionDescription(msg), () => {
-        if (this.debug) {
-          console.warn('Set setRemoteDescription, creating Answer');
-        }
-        this.connections[msg.id].peerConnection.createAnswer(
-          sessionDescription => {
-            this.connections[msg.id].peerConnection.setLocalDescription(sessionDescription);
-            if (this.debug) {
-              console.warn('Sending answer signal ', sessionDescription.toJSON());
-            }
-            this.sendSignal(sessionDescription.toJSON());
-          },
-          err => {
-            if (this.debug) {
-              console.error('Could not create offer', err);
-            }
+      this.connections[msg.id].peerConnection
+        .setRemoteDescription(new RTCSessionDescription(msg))
+        .then(() => this.connections[msg.id].peerConnection.createAnswer())
+        .then(answer => {
+          if (this.debug) {
+            console.warn('sending answer signal ', answer.toJSON());
           }
-        );
-      });
+          this.connections[msg.id].peerConnection.setLocalDescription(answer);
+          this.sendSignal(answer.toJSON());
+        })
+        .catch(err => {
+          if (this.debug) {
+            console.error('could not create offer', err);
+          }
+        });
     }
   }
 
@@ -271,37 +248,25 @@ export class NgFxDataChannel {
     const RTCSessionDescription = (<any>window).RTCSessionDescription || (<any>window).mozRTCSessionDescription;
     if (RTCSessionDescription && this.connections[msg.id].peerConnection.signalingState !== 'stable') {
       if (this.debug) {
-        console.warn('Handling answer from ', msg.id, this.connections[msg.id].peerConnection);
+        console.warn('handling answer from ', msg.id, this.connections[msg.id].peerConnection);
       }
-      this.connections[msg.id].peerConnection.setRemoteDescription(new RTCSessionDescription(msg), () => {
-        this.connections[msg.id].peerConnection.createOffer(
-          sessionDescription => {
-            if (this.debug) {
-              console.warn('Sending offer');
-            }
-            if (this.connections[msg.id].channel.readyState !== 'open') {
-              this.connections[msg.id].peerConnection.setLocalDescription(sessionDescription, () => {
-                this.sendCandidates(msg);
-              });
-              this.sendSignal(sessionDescription.toJSON());
-            }
-          },
-          function(err) {
-            console.error('Could not create offer', err);
-          }
-        );
+
+      this.connections[msg.id].peerConnection.onicecandidate = this.onICECandidate.bind(this);
+      this.connections[msg.id].peerConnection.setRemoteDescription(new RTCSessionDescription(msg)).then(() => {
+        if (this.debug) {
+          console.warn('sending offer');
+        }
+        this.sendSignal(msg);
       });
     }
   }
 
   onCandidateSignal(msg) {
     const candidate = new (<any>window).RTCIceCandidate(msg);
-
     if (this.connections[msg.id].isCandidate !== true) {
       if (this.debug) {
-        console.warn('Adding candidate to peerConnection: ' + msg.sender);
+        console.warn('adding candidate to peerConnection: ' + msg.sender);
       }
-
       this.connections[msg.id].isCandidate = true;
       this.connections[msg.id].peerConnection.addIceCandidate(candidate);
     }
@@ -309,13 +274,14 @@ export class NgFxDataChannel {
 
   onSignal(snapshot) {
     const msg = JSON.parse(snapshot.data);
-    const sender = msg.sender;
-    const type = msg.type;
-    msg.id = msg.sender;
 
-    if (!this.connections[msg.sender]) {
-      this.connections[msg.sender] = {
-        id: msg.sender,
+    if (msg.sender && msg.id === undefined) {
+      msg.id = msg.sender;
+    }
+
+    if (!this.connections[msg.id]) {
+      this.connections[msg.id] = {
+        id: msg.id,
         isConnected: false,
         isWebRTC: msg.type === 'ws-offer' ? false : true,
         isWebSocket: msg.type === 'ws-offer' ? true : false
@@ -323,29 +289,29 @@ export class NgFxDataChannel {
       this.init(msg);
     }
 
-    if (this.connections[msg.sender].isConnected) {
+    if (this.connections[msg.id].isConnected) {
       return;
     }
 
     if (this.debug) {
-      console.log("Received a '" + type + "' signal from " + sender + ' of type ' + type);
+      console.log("Received a '" + msg.type + "' signal from " + msg.id + ' of type ' + msg.type);
     }
-    if (type === 'message') {
+    if (msg.type === 'message') {
       this.onWebSocketMessage(msg);
     }
-    if (type === 'ws-offer') {
+    if (msg.type === 'ws-offer') {
       if (!this.hasWSConnection) {
         this.addWSPeer(msg);
         this.initSocket(msg);
       }
     }
-    if (type === 'offer') {
+    if (msg.type === 'offer') {
       this.onOffer(msg);
     }
-    if (type === 'answer') {
+    if (msg.type === 'answer') {
       this.onAnswerSignal(msg);
     }
-    if (type === 'candidate') {
+    if (msg.type === 'candidate') {
       this.onCandidateSignal(msg);
     }
   }
@@ -362,7 +328,6 @@ export class NgFxDataChannel {
         isWebRTC: true,
         isWebSocket: false
       };
-
       this.init(msg);
     }
 
@@ -373,9 +338,8 @@ export class NgFxDataChannel {
         }
       });
       if (this.debug) {
-        console.log('Client disconnected!');
+        console.log('client disconnected!');
       }
-      // this.sendAnnounce();
     }
   }
 
@@ -385,12 +349,12 @@ export class NgFxDataChannel {
       candidate = candidate.toJSON();
       candidate.type = 'candidate';
       if (this.debug) {
-        console.log('Sending candidate');
+        console.log('sending candidate');
       }
       this.sendSignal(candidate);
     } else {
       if (this.debug) {
-        console.log('All candidates sent');
+        console.log('all candidates sent');
       }
     }
   }
@@ -406,51 +370,43 @@ export class NgFxDataChannel {
       this.connections[ev.id].isNegotiating = false;
       this.emitter.emit('open');
     }
-    // if (this.debug) {
-    console.log('Data channel created!', this.connections[ev.id]);
-    // }
+    if (this.debug) {
+      console.log('data channel created!', this.connections[ev.id]);
+    }
   }
 
   onDataChannelClosed() {
     if (this.debug) {
-      console.log('The data channel has been closed!');
+      console.log('data channel closed!');
     }
   }
 
   onDataChannelMessage(ev) {
-    // this.store.messages.push({
-    //   id: this.count++,
-    //   event: ev,
-    //   sender: ev.sender,
-    //   createdAt: new Date()
-    // });
-    this.store.messages.push(JSON.parse(ev.data));
-    this.messages.emit(this.store.messages[this.store.messages.length - 1]);
-    this.channelObserver.next(this.store.messages);
     if (this.debug) {
-      console.log('Received Message: ' + ev.data);
-    }
-  }
-
-  onWebSocketMessage(ev) {
-    this.store.messages.push({
-      id: this.count++,
-      data: JSON.parse(ev.data),
-      sender: ev.sender,
-      createdAt: new Date()
-    });
-
-    this.messages.emit(this.store.messages[this.store.messages.length - 1]);
-    this.channelObserver.next(this.store.messages);
-
-    if (this.debug) {
-      console.log('Received Message: ' + ev.data, {
+      console.log('received Message: ', {
         id: this.count++,
         data: JSON.parse(ev.data),
-        sender: ev.sender,
+        sender: JSON.parse(ev.data).sender,
         createdAt: new Date()
       });
     }
+    this.store.messages.push(JSON.parse(ev.data));
+    this.messages.emit(this.store.messages[this.store.messages.length - 1]);
+    this.channelObserver.next(this.store.messages);
+  }
+
+  onWebSocketMessage(ev) {
+    if (this.debug) {
+      console.log('received message: ', {
+        id: this.count++,
+        data: JSON.parse(ev.data),
+        sender: JSON.parse(ev.data).sender,
+        createdAt: new Date()
+      });
+    }
+    this.store.messages.push(JSON.parse(ev.data));
+    this.messages.emit(this.store.messages[this.store.messages.length - 1]);
+    this.channelObserver.next(this.store.messages);
   }
 
   onWebSocketSignal(snapshot) {
@@ -461,7 +417,7 @@ export class NgFxDataChannel {
     }
 
     if (this.debug) {
-      console.log("Received a '" + msg.type + "' signal from " + msg.sender + ' of type ' + msg.type);
+      console.log("received a '" + msg.type + "' signal from " + msg.sender + ' of type ' + msg.type);
     }
 
     if (msg.type === 'message') {
@@ -482,7 +438,7 @@ export class NgFxDataChannel {
     });
 
     if (this.debug) {
-      console.log(JSON.parse(JSON.stringify(msg, null, 4)));
+      console.log('sending message: ', JSON.parse(JSON.stringify(msg, null, 4)));
     }
 
     if (Object.keys(this.connections).length > 0) {
@@ -523,28 +479,13 @@ export class NgFxDataChannel {
     };
   }
 
-  connect(msg) {
-    this.connections[msg.id].peerConnection.createOffer(
-      sessionDescription => {
-        if (this.debug) {
-          console.warn('Sending offer');
-        }
-        if (this.connections[msg.id].channel.readyState !== 'open') {
-          this.connections[msg.id].peerConnection.setLocalDescription(sessionDescription, () => {
-            this.sendCandidates(msg);
-          });
-          this.sendSignal(sessionDescription.toJSON());
-        }
-      },
-      function(err) {
-        console.error('Could not create offer', err);
-      }
-    );
-  }
-
   init(msg) {
     const RTCPeerConnection =
       (<any>window).RTCPeerConnection || (<any>window).mozRTCPeerConnection || (<any>window).webkitRTCPeerConnection;
+
+    if (this.debug) {
+      console.log('setting up webrtc peer connection');
+    }
 
     if (!this.connections[msg.id]) {
       this.connections[msg.id] = {
@@ -558,43 +499,35 @@ export class NgFxDataChannel {
     this.connections[msg.id].peerConnection.ondatachannel = this.onDataChannel.bind(this);
     this.connections[msg.id].peerConnection.oniceconnectionstatechange = this.onICEStateChange.bind(this, msg);
 
-    this.connections[msg.id].channel = this.connections[msg.id].peerConnection.createDataChannel(this.name, this.peerConnectionConfig);
+    this.connections[msg.id].channel = this.connections[msg.id].peerConnection.createDataChannel(this.key, this.peerConnectionConfig);
     this.connections[msg.id].channel.onopen = this.onDataChannelOpen.bind(this, msg);
     this.connections[msg.id].channel.onmessage = this.onDataChannelMessage.bind(this, [msg]);
     this.hasRTCConnection = true;
-
-    if (this.debug) {
-      console.log('Setting up peer connection');
-    }
   }
 
-  addWSPeer(conf) {
-    if (!this.connections[conf.id]) {
-      this.connections[conf.id] = {
-        id: conf.id,
+  addWSPeer(msg) {
+    if (!this.connections[msg.id]) {
+      this.connections[msg.id] = {
+        id: msg.id,
         isConnected: true,
         isWebSocket: true
       };
     }
     if (this.debug) {
-      console.log('Setting up websocket connection with ' + this.websocketConnections[conf.id].id);
+      console.log('setting up websocket connection with ' + this.websocketConnections[msg.id].id);
     }
   }
 
-  initSocket(conf: any) {
+  initSocket(msg: any) {
     if (!this.hasWSConnection) {
       this.isOpen = true;
       this.hasWSConnection = true;
 
-      this.connections[conf.id].channel = this.createWebSocketChannel();
-      // create a child
-      // this.channels.websocket = this.db.child('messages').child(this.id);
-      // this.channels.websocket.on('child_added', this.onWebSocketSignal.bind(this));
-
-      this.wss.onmessage = msg => this.onWebSocketSignal(msg);
+      this.connections[msg.id].channel = this.createWebSocketChannel();
+      this.wss.onmessage = message => this.onWebSocketSignal(message);
 
       this.hasWSConnection = true;
-      this.connections[conf.id] = true;
+      this.connections[msg.id] = true;
       this.emitter.emit('open');
 
       if (this.debug) {
