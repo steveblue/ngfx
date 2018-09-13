@@ -65,6 +65,7 @@ module.exports = {
                 'core-js/client/shim.min.js',
                 'core-js/client/shim.min.js.map',
                 'zone.js/dist/zone.min.js',
+                'webrtc-adapter/out/adapter.js',
                 'web-animations-js/web-animations.min.js',
                 'web-animations-js/web-animations.min.js.map',
                 'ie9-oninput-polyfill/ie9-oninput-polyfill.js',
@@ -87,6 +88,7 @@ module.exports = {
               prod: [
                 'core-js/client/shim.min.js',
                 'zone.js/dist/zone.min.js',
+                'webrtc-adapter/out/adapter.js',
                 'web-animations-js/web-animations.min.js',
                 'ie9-oninput-polyfill/ie9-oninput-polyfill.js',
                 'angular-polyfills/dist/blob.js',

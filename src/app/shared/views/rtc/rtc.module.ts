@@ -6,9 +6,9 @@ import { uuid, DataChannelModule } from './../../../lib/rtc/src/services/data-ch
 const DataChannelConfig = {
   key: 'openSeasame',
   id: uuid(),
-  signalServer: `ws://localhost:5555`,
-  announceServer: `ws://localhost:5556`,
-  messageServer: `ws://localhost:5557`,
+  signalServer: `wss://localhost:4444/signal`,
+  announceServer: `wss://localhost:4444/announce`,
+  messageServer: `wss://localhost:4444/message`,
   debug: true
 };
 

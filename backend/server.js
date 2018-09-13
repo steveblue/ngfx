@@ -4,12 +4,19 @@
 const express = require('express');
 const http = require('http');
 const https = require('https');
+const path = require('path');
 const fs = require('fs');
 const app = express();
 const config = require(process.cwd() + '/angular.json');
 const serverConfig = {
   dev: require(process.cwd() + '/config/server.config.dev.js'),
   prod: require(process.cwd() + '/config/server.config.prod.js')
+};
+const sslOptions = {
+  key: fs.readFileSync(path.join(__dirname, 'server.key')),
+  cert: fs.readFileSync(path.join(__dirname, 'server.crt')),
+  requestCert: false,
+  rejectUnauthorized: false
 };
 
 let projectRoot = config.projects[config.defaultProject].architect.build.options.outputPath;
@@ -25,12 +32,20 @@ process.argv.forEach(function(arg) {
   }
 });
 
+// Create Server
+
+server = https.createServer(sslOptions, app);
+
 // Livereload Server Start
 
 let live = function() {
   let livereload = require('livereload');
   let liveserver = livereload.createServer({
-    port: 35729
+    port: 35729,
+    https: {
+      key: fs.readFileSync(path.join(__dirname, 'server.key')),
+      cert: fs.readFileSync(path.join(__dirname, 'server.crt'))
+    }
   });
   liveserver.watch([
     process.cwd() + '/' + projectRoot + '/assets',
@@ -42,10 +57,6 @@ let live = function() {
   ]);
   console.log('Livereload available at ' + host + ':' + 35729);
 };
-
-// Create Server
-
-server = http.createServer(app);
 
 if (canWatch === true) {
   live();
@@ -59,8 +70,8 @@ const routes = require('./router')(app);
 
 // Server Start
 
-server.listen(port);
-
-console.log('Express available at ' + host + ':' + port);
+server.listen(port, () => {
+  console.log('Express available at ' + host + ':' + port);
+});
 
 module.exports = app;

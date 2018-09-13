@@ -54,9 +54,9 @@ export class NgFxDataChannel {
     this.config = {
       key: conf && conf.key ? conf.key : createKey(),
       id: conf && conf.id ? conf.id : uuid(),
-      signalServer: conf && conf.signalServer ? conf.signalServer : `ws://${location.host.split(':')[0]}:5555`,
-      announceServer: conf && conf.announceServer ? conf.announceServer : `ws://${location.host.split(':')[0]}:5556`,
-      messageServer: conf && conf.messageServer ? conf.messageServer : `ws://${location.host.split(':')[0]}:5557`
+      signalServer: conf && conf.signalServer ? conf.signalServer : `wss://${location.host.split(':')[0]}:5555`,
+      announceServer: conf && conf.announceServer ? conf.announceServer : `wss://${location.host.split(':')[0]}:5556`,
+      messageServer: conf && conf.messageServer ? conf.messageServer : `wss://${location.host.split(':')[0]}:5557`
     };
     if (this.debug) {
       console.log('webrtc datachannel');
@@ -100,6 +100,7 @@ export class NgFxDataChannel {
   }
 
   connect(ev: any) {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.connections[ev.id] = {
       id: ev.id,
       key: ev.key,
@@ -107,6 +108,16 @@ export class NgFxDataChannel {
     };
     this.connections[ev.id].channel = this.connections[ev.id].peerConnection.createDataChannel(ev.key, this.peerConnectionConfig);
     this.connections[ev.id].channel.onopen = this.onDataChannelOpen.bind(this);
+    if (isSafari) {
+      // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel
+      navigator.getUserMedia(
+        { audio: true, video: { width: 1280, height: 720 } },
+        stream => {},
+        err => {
+          console.log('error: ' + err.name);
+        }
+      );
+    }
     this.connections[ev.id].peerConnection.ondatachannel = this.onDataChannel.bind(this, ev.id);
     // this.connections[ev.id].peerConnection.onnegotiationneeded = this.sendOffer.bind(this, ev);
     this.connections[ev.id].peerConnection.oniceconnectionstatechange = this.onICEStateChange.bind(this, ev);
@@ -197,10 +208,20 @@ export class NgFxDataChannel {
 
   sendAnswer(ev: any, offer: any) {
     console.warn('creating answer');
-
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (async () => {
       const sessionDescription = new RTCSessionDescription(offer);
       this.connections[ev.id].peerConnection.setRemoteDescription(sessionDescription);
+      if (isSafari) {
+        // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel
+        navigator.getUserMedia(
+          { audio: true, video: { width: 1280, height: 720 } },
+          stream => {},
+          err => {
+            console.log('error: ' + err.name);
+          }
+        );
+      }
       const answer = this.connections[ev.id].peerConnection.createAnswer();
       answer.catch(err => console.error('error creating answer', err));
       this.connections[ev.id].peerConnection.setLocalDescription(await answer);

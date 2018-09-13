@@ -13,6 +13,7 @@
   <!-- build:remove:prod -->
   <script src="/lib/core-js/client/shim.min.js"></script>
   <script src="/lib/zone.js/dist/zone.min.js"></script>
+  <script src="/lib/webrtc-adapter/out/adapter.js"></script>
   <script src="/lib/web-animations-js/web-animations.min.js"></script>
   <script src="/lib/ie9-oninput-polyfill/ie9-oninput-polyfill.js"></script>
   <script src="/lib/angular-polyfills/dist/blob.js"></script>
@@ -45,12 +46,13 @@
       System.import('app')
     ]);
   </script>
-  <script>
+  <!-- <script>
     if (!navigator.userAgent.indexOf("MSIE 9") > -1) {
-      document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+      document.write('<script src="https://' + (location.host || 'localhost').split(':')[0] +
         ':35729/livereload.js?snipver=1"></' + 'script>')
     }
-  </script>
+  </script> -->
+  <!-- <script src="https://localhost:35729/livereload.js?snipver=1"></script> -->
   <!-- /build -->
   <!-- build:remove:dev -->
   <script src="system.import.js"></script>
