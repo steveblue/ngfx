@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RtcComponent } from './rtc.component';
+import { ControllerTestComponent } from './controller-test.component';
 import { uuid, DataChannelModule } from './../../../lib/rtc/src/services/data-channel/data-channel.module';
 
 const DataChannelConfig = {
-  key: 'openSeasame',
+  key: 'XXXXX',
   id: uuid(),
   signalServer: `wss://localhost:4444/signal`,
   announceServer: `wss://localhost:4444/announce`,
@@ -14,6 +14,6 @@ const DataChannelConfig = {
 
 @NgModule({
   imports: [CommonModule, DataChannelModule.forChild(DataChannelConfig)],
-  declarations: [RtcComponent]
+  declarations: [ControllerTestComponent]
 })
-export class RtcModule {}
+export class ControllerTestModule {}

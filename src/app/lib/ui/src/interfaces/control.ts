@@ -14,4 +14,6 @@ export interface NgFxControl {
   width?: number;
   timeStamp?: Date | number;
   snapToCenter?: boolean;
+  column?: string;
+  row?: string;
 }

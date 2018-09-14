@@ -5,7 +5,7 @@ import { NgFxControl } from './../../../src/interfaces/control';
 @Component({
   selector: 'ngfx-surface',
   templateUrl: './surface.component.html',
-  styleUrls: ['./surface.component.scss']
+  styleUrls: ['./surface.component.css']
 })
 export class NgfxSurfaceComponent implements OnInit, OnChanges {
   @Input('controller')

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, HostBinding } from '@angular/core';
 import { NgFxControl } from './../../interfaces/control';
 import { NgFxDraggableDirective } from './draggable.directive';
 
@@ -12,6 +12,16 @@ export class NgFxSliderComponent {
   control: NgFxControl;
   @ViewChild(NgFxDraggableDirective)
   draggable: NgFxDraggableDirective;
+
+  @HostBinding('style.grid-column')
+  get gridColumn(): string {
+    return this.control.column || '';
+  }
+
+  @HostBinding('style.grid-row')
+  get gridRow(): string {
+    return this.control.row || '';
+  }
 
   constructor() {}
 

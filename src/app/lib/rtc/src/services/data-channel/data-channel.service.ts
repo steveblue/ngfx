@@ -46,8 +46,8 @@ export class NgFxDataChannel {
   public messages: EventEmitter<any>;
   public connections: any;
   public local: RTCPeerConnection;
-  public debug: boolean;
   public peerConnectionConfig: any;
+  public debug;
 
   constructor(@Inject(NgFxDataChannelConfigService) private conf) {
     this.debug = conf.debug ? conf.debug : false;
@@ -111,7 +111,7 @@ export class NgFxDataChannel {
     if (isSafari) {
       // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel
       navigator.getUserMedia(
-        { audio: true, video: { width: 1280, height: 720 } },
+        { audio: false, video: { width: 1280, height: 720 } },
         stream => {},
         err => {
           console.log('error: ' + err.name);
@@ -188,7 +188,9 @@ export class NgFxDataChannel {
   }
 
   sendOffer(ev: any) {
-    console.warn('creating offer');
+    if (this.debug) {
+      console.warn('creating offer');
+    }
     (async () => {
       const offer = this.connections[ev.id].peerConnection.createOffer();
       offer.catch(err => console.error('error creating offer', err));
@@ -207,7 +209,9 @@ export class NgFxDataChannel {
   }
 
   sendAnswer(ev: any, offer: any) {
-    console.warn('creating answer');
+    if (this.debug) {
+      console.warn('creating answer');
+    }
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (async () => {
       const sessionDescription = new RTCSessionDescription(offer);
@@ -255,7 +259,9 @@ export class NgFxDataChannel {
   }
 
   onICEStateChange(ev: any) {
-    console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
+    if (this.debug) {
+      console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
+    }
     if (this.connections[ev.id].peerConnection.iceConnectionState === 'disconnected') {
       if (this.debug) {
         console.log('client disconnected!');
