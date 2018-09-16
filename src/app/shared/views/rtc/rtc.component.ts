@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NgFxDataChannel } from './../../../lib/rtc/src/services/data-channel/data-channel.service';
+import { NgFxDataChannel, NgFxDataChannelEvent } from './../../../lib/rtc/src/services/data-channel/data-channel.service';
 
 @Component({
   selector: 'app-rtc',
@@ -14,10 +14,10 @@ export class RtcComponent implements OnInit {
 
   ngOnInit() {
     this._client.config.key = 'newRoom';
-    this._client.emitter.subscribe(msg => {
-      if (msg === 'open') {
+    this._client.emitter.subscribe((ev: NgFxDataChannelEvent) => {
+      if (ev.type === 'open') {
         console.log('data channel open');
-        this.messages.push(msg);
+        this.messages.push(ev.type);
         this._client.send({ message: 'ping' });
         this._ref.detectChanges();
       }

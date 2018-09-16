@@ -8,7 +8,39 @@ export interface NgFxDataChannelConfig {
   signalServer: string;
   announceServer: string;
   messageServer: string;
+  stun?: RTCConfiguration;
   debug?: boolean;
+}
+
+export interface NgFxDataChannelMessage {
+  sender?: string;
+  id: string;
+  key?: string;
+  type?: string;
+  timestamp?: Date;
+  data?: any;
+}
+
+export interface NgfxDataChannelPeer {
+  peerConnection: RTCPeerConnection;
+  id: string;
+  key: string;
+  hasOffer?: boolean;
+  hasAnswer?: boolean;
+  channel?: RTCDataChannel;
+}
+
+export interface NgFxDataChannelPeerMap {
+  [key: string]: NgfxDataChannelPeer;
+}
+
+export interface NgFxDataChannelStore {
+  messages: NgFxDataChannelMessage[];
+}
+
+export interface NgFxDataChannelEvent {
+  type: string;
+  payload: any;
 }
 
 export const uuid = function() {
@@ -38,17 +70,16 @@ export class NgFxDataChannel {
   public signal: WebSocket; // signal
   public message: WebSocket; // messaging
   public announce: WebSocket; // announce
-  public stun: any;
+  public stun: RTCConfiguration;
   public observer: Observable<any>;
   public channelObserver: Observer<any>;
-  public store: any;
-  public emitter: EventEmitter<any>;
-  public messages: EventEmitter<any>;
-  public connections: any;
+  public store: NgFxDataChannelStore;
+  public emitter: EventEmitter<NgFxDataChannelEvent>;
+  public messages: EventEmitter<NgFxDataChannelMessage>;
+  public connections: NgFxDataChannelPeerMap;
   public local: RTCPeerConnection;
-  public peerConnectionConfig: any;
   public debug;
-  private _pulseInterval: any;
+  private _pulseInterval: number;
 
   constructor(@Inject(NgFxDataChannelConfigService) private conf) {
     this.debug = conf.debug ? conf.debug : false;
@@ -57,7 +88,16 @@ export class NgFxDataChannel {
       id: conf && conf.id ? conf.id : uuid(),
       signalServer: conf && conf.signalServer ? conf.signalServer : `wss://${location.host.split(':')[0]}:5555`,
       announceServer: conf && conf.announceServer ? conf.announceServer : `wss://${location.host.split(':')[0]}:5556`,
-      messageServer: conf && conf.messageServer ? conf.messageServer : `wss://${location.host.split(':')[0]}:5557`
+      messageServer: conf && conf.messageServer ? conf.messageServer : `wss://${location.host.split(':')[0]}:5557`,
+      stun: conf
+        ? conf
+        : {
+            iceServers: [
+              {
+                urls: 'stun:stun.l.google.com:19302'
+              }
+            ]
+          }
     };
     if (this.debug) {
       console.log('webrtc datachannel');
@@ -77,40 +117,29 @@ export class NgFxDataChannel {
       this.sendPulse();
     });
     this.message.onmessage = ev => this.onMessage(ev);
-
-    this.stun = {
-      iceServers: [
-        {
-          urls: 'stun:stun.l.google.com:19302'
-        }
-      ]
-    };
-
-    this.peerConnectionConfig = {
-      ordered: false
-    };
     this.store = {
       messages: []
     };
     this.connections = {};
-
     this.emitter = new EventEmitter();
     this.messages = new EventEmitter();
     this.observer = new Observable(observer => (this.channelObserver = observer)).pipe(share());
     this.observer.subscribe();
   }
 
-  connect(ev: any) {
+  connect(ev: NgFxDataChannelMessage) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.connections[ev.id] = {
       id: ev.id,
       key: ev.key,
-      peerConnection: new RTCPeerConnection(this.stun)
+      peerConnection: new RTCPeerConnection(this.config.stun)
     };
-    this.connections[ev.id].channel = this.connections[ev.id].peerConnection.createDataChannel(ev.key, this.peerConnectionConfig);
-    this.connections[ev.id].channel.onopen = this.onDataChannelOpen.bind(this);
+    this.connections[ev.id].channel = this.connections[ev.id].peerConnection.createDataChannel(ev.key, {
+      ordered: false
+    }); // TODO: see if there is a need to make the datachannel config public
+    this.connections[ev.id].channel.onopen = this.onDataChannelOpen.bind(this, { id: ev.id, key: ev.key });
     if (isSafari) {
-      // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel
+      // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel in safari
       navigator.getUserMedia(
         { audio: false, video: { width: 1280, height: 720 } },
         stream => {},
@@ -120,18 +149,24 @@ export class NgFxDataChannel {
       );
     }
     this.connections[ev.id].peerConnection.ondatachannel = this.onDataChannel.bind(this, ev.id);
-    // this.connections[ev.id].peerConnection.onnegotiationneeded = this.sendOffer.bind(this, ev);
     this.connections[ev.id].peerConnection.oniceconnectionstatechange = this.onICEStateChange.bind(this, ev);
     this.connections[ev.id].peerConnection.onicecandidate = this.onICECandidate.bind(this);
     this.connections[ev.id].peerConnection.oniceconnectionstatechange = this.onICEChange.bind(this, ev.id);
-    this.connections[ev.id].peerConnection.onicegatheringstatechange = this.onICEGatheringStateChangeEvent;
 
     if (this.debug) {
       console.warn('new peer', this.connections[ev.id]);
     }
   }
 
-  sendSignal(ev: any, data: any) {
+  isRTCSupported() {
+    if (typeof RTCPeerConnection == 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  sendSignal(ev: NgFxDataChannelMessage, data: any) {
     if (!data) {
       return;
     }
@@ -175,6 +210,15 @@ export class NgFxDataChannel {
       console.log('announced our id is ' + this.config.id);
     }
 
+    if (!this.isRTCSupported()) {
+      console.warn('client is attempting to connect but this client does not support RTCPeerConnection');
+      this.emitter.emit({
+        type: 'error',
+        payload: {
+          message: 'client is attempting to connect but this client does not support RTCPeerConnection'
+        }
+      });
+    }
     this.announce.send(JSON.stringify(msg));
   }
 
@@ -183,9 +227,18 @@ export class NgFxDataChannel {
     if (this.debug) {
       console.log('announce:', msg);
     }
-    if (!this.connections[ev.id]) {
+    if (!this.connections[ev.id] && this.isRTCSupported()) {
       this.connect(ev);
       this.sendOffer(ev);
+    } else {
+      // TODO: add fallback for websockets?
+      this.emitter.emit({
+        type: 'error',
+        payload: {
+          message: 'client is attempting to connect but this client does not support RTCPeerConnection'
+        }
+      });
+      console.warn('client is attempting to connect but this client does not support RTCPeerConnection');
     }
   }
 
@@ -210,7 +263,7 @@ export class NgFxDataChannel {
     }
   }
 
-  sendOffer(ev: any) {
+  sendOffer(ev: NgFxDataChannelMessage) {
     if (this.debug) {
       console.warn('creating offer');
     }
@@ -222,7 +275,7 @@ export class NgFxDataChannel {
     })();
   }
 
-  onOffer(ev: any, offer: any) {
+  onOffer(ev: NgFxDataChannelMessage, offer: RTCSessionDescription) {
     this.connect(ev);
     this.connections[ev.id].hasOffer = true;
     if (this.debug) {
@@ -231,7 +284,7 @@ export class NgFxDataChannel {
     this.sendAnswer(ev, offer);
   }
 
-  sendAnswer(ev: any, offer: any) {
+  sendAnswer(ev: NgFxDataChannelMessage, offer: RTCSessionDescription) {
     if (this.debug) {
       console.warn('creating answer');
     }
@@ -256,7 +309,7 @@ export class NgFxDataChannel {
     })();
   }
 
-  onAnswer(ev: any, answer: any) {
+  onAnswer(ev: NgFxDataChannelMessage, answer: any) {
     this.connections[ev.id].hasAnswer = true;
     if (this.debug) {
       console.warn('received answer', ev, new RTCSessionDescription(answer));
@@ -265,20 +318,16 @@ export class NgFxDataChannel {
     this.connections[ev.id].peerConnection.setRemoteDescription(sessionDescription);
   }
 
-  onCandidate(ev: any, candid: any) {
+  onCandidate(ev: NgFxDataChannelMessage, candid: RTCIceCandidateInit | RTCIceCandidate) {
     // console.warn('candidate:', ev, candid);
     const candidate = new (<any>window).RTCIceCandidate(candid);
     this.connections[ev.id].peerConnection.addIceCandidate(candidate);
   }
 
-  onICEGatheringStateChangeEvent(ev: any) {
-    // console.log(ev);
-  }
-
   onICEChange(id: string, ev: any) {
     // console.warn('ice change:', id, ev);
     if (this.debug) {
-      console.log(`${id} ice ${ev.target.iceConnectionState}`);
+      console.log(`${id} ice ${ev.target.iceConnectionState}`, ev);
     }
     if (ev.target.iceConnectionState === 'disconnected' || ev.target.iceConnectionState === 'failed') {
       delete this.connections[id];
@@ -286,9 +335,9 @@ export class NgFxDataChannel {
     }
   }
 
-  onICEStateChange(ev: any) {
-    console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
+  onICEStateChange(ev: NgfxDataChannelPeer) {
     if (this.debug) {
+      console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
     }
     if (this.connections[ev.id].peerConnection.iceConnectionState === 'disconnected') {
       if (this.debug) {
@@ -297,7 +346,7 @@ export class NgFxDataChannel {
     }
   }
 
-  onICECandidate(ev) {
+  onICECandidate(ev: RTCIceCandidate) {
     const candidate = JSON.stringify(ev.candidate);
     if (!candidate) {
       if (this.debug) {
@@ -320,7 +369,7 @@ export class NgFxDataChannel {
     }
   }
 
-  onDataChannel(id: string, ev: any) {
+  onDataChannel(id: string, ev: RTCDataChannelEvent) {
     // RTCDataChannelEvent
     ev.channel.onmessage = this.onMessage.bind(this);
     if (this.debug) {
@@ -328,11 +377,17 @@ export class NgFxDataChannel {
     }
   }
 
-  onDataChannelOpen(id: string, ev: any) {
+  onDataChannelOpen(ev: any) {
     if (this.debug) {
-      console.error('data channel created!');
-      this.emitter.emit('open');
+      console.error('data channel created!', ev);
     }
+    this.emitter.emit({
+      type: 'open',
+      payload: {
+        id: ev.id,
+        key: ev.key
+      }
+    });
   }
 
   onMessage(msg: MessageEvent) {
