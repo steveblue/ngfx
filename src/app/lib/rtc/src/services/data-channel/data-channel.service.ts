@@ -48,6 +48,7 @@ export class NgFxDataChannel {
   public local: RTCPeerConnection;
   public peerConnectionConfig: any;
   public debug;
+  private _pulseInterval: any;
 
   constructor(@Inject(NgFxDataChannelConfigService) private conf) {
     this.debug = conf.debug ? conf.debug : false;
@@ -73,7 +74,7 @@ export class NgFxDataChannel {
     this.signal.onmessage = ev => this.onSignal(ev);
     this.announce.onmessage = ev => this.onAnnounce(ev);
     this.announce.addEventListener('open', () => {
-      this.sendAnnounce();
+      this.sendPulse();
     });
     this.message.onmessage = ev => this.onMessage(ev);
 
@@ -142,7 +143,21 @@ export class NgFxDataChannel {
     this.signal.send(JSON.stringify(ev));
   }
 
+  sendPulse() {
+    this._pulseInterval = window.setInterval(() => {
+      if (Object.keys(this.connections).length <= 0) {
+        if (this.debug) {
+          console.log('sending pulse');
+        }
+        this.sendAnnounce();
+      }
+    }, 1000);
+  }
+
   sendAnnounce() {
+    if (Object.keys(this.connections).length > 0 && this._pulseInterval) {
+      window.clearInterval(this._pulseInterval);
+    }
     const msg = {
       key: this.config.key,
       id: this.config.id,

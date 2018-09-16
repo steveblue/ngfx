@@ -2,7 +2,6 @@
 // server.js
 
 const express = require('express');
-const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
@@ -13,8 +12,8 @@ const serverConfig = {
   prod: require(process.cwd() + '/config/server.config.prod.js')
 };
 const sslOptions = {
-  key: fs.readFileSync(path.join(__dirname, 'server.key')),
-  cert: fs.readFileSync(path.join(__dirname, 'server.crt')),
+  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
   requestCert: false,
   rejectUnauthorized: false
 };
@@ -43,8 +42,8 @@ let live = function() {
   let liveserver = livereload.createServer({
     port: 35729,
     https: {
-      key: fs.readFileSync(path.join(__dirname, 'server.key')),
-      cert: fs.readFileSync(path.join(__dirname, 'server.crt'))
+      key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
     }
   });
   liveserver.watch([
@@ -71,7 +70,7 @@ const routes = require('./router')(app);
 // Server Start
 
 server.listen(port, () => {
-  console.log('Express available at ' + host + ':' + port);
+  console.log('SSL connection available at ' + host + ':' + port);
 });
 
 module.exports = app;

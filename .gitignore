@@ -10,8 +10,7 @@
 
 # dependencies
 /node_modules
-/backend/server.crt
-/backend/server.key
+*.pem
 
 # IDEs and editors
 /.idea

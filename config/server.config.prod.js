@@ -1,6 +1,6 @@
 const config = {
   origin: 'localhost',
-  port: 4200
+  port: 443
 };
 
 module.exports = config;
