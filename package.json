@@ -14,7 +14,8 @@
     "test": "ng test",
     "format:fix": "pretty-quick --staged",
     "precommit": "run-s format:fix lint",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "publish": "ngr build lib @ngfx/rtc --env prod && ngr build lib @ngfx/ui --env prod"
   },
   "private": true,
   "dependencies": {
