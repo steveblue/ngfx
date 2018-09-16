@@ -1,8 +1,7 @@
 import { Component, Input, ViewChild, HostBinding } from '@angular/core';
 import { NgFxControl } from './../../interfaces/control';
 import { NgFxDraggableDirective } from './draggable.directive';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SafeStyle } from 'dist/ngfx/lib/@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngfx-slider, [ngfx-slider]',
@@ -30,7 +29,7 @@ export class NgFxSliderComponent {
     return this.control.name !== undefined && this.control.name.length > 0;
   }
 
-  sanitize(style: string) {
+  sanitize(style: string): SafeStyle {
     return this._sanitizer.bypassSecurityTrustStyle(style);
   }
 }

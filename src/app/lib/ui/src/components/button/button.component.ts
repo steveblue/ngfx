@@ -1,8 +1,7 @@
 import { Component, Input, HostBinding, HostListener } from '@angular/core';
 import { NgFxControl } from './../../interfaces/control';
 import { NgFxController } from './../../services/controller/controller.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SafeStyle } from 'dist/ngfx/lib/@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngfx-button, [ngfx-button]',
@@ -62,7 +61,7 @@ export class NgFxButtonComponent {
     return this.control.name !== undefined && this.control.name.length > 0;
   }
 
-  sanitize(style: string) {
+  sanitize(style: string): SafeStyle {
     return this._sanitizer.bypassSecurityTrustStyle(style);
   }
 }

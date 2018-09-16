@@ -1,13 +1,19 @@
 {
   "name": "@ngfx/ui",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "repository": "https://github.com/steveblue/ngfx",
   "homepage": "https://github.com/steveblue/ngfx#readme",
   "description": "Angular UI library for creative applications",
   "bugs": {
-    "url" : "https://github.com/steveblue/ngfx/issues"
+    "url": "https://github.com/steveblue/ngfx/issues"
   },
-  "keywords": ["ui", "front end", "angular", "component", "library"],
+  "keywords": [
+    "ui",
+    "front end",
+    "angular",
+    "component",
+    "library"
+  ],
   "license": "MIT",
   "module": "./esm5/ui.es5.js",
   "es2015": "./fesm2015/ui.js",

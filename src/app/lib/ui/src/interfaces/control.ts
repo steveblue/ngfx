@@ -1,4 +1,4 @@
-import { SafeStyle } from '@angular/platform-browser/src/security/dom_sanitization_service';
+import { SafeStyle } from '@angular/platform-browser';
 
 export interface NgFxControl {
   type: string;

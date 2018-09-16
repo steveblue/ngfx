@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgFxController } from '../../services/controller/controller.service';
 import { NgFxControl } from './../../../src/interfaces/control';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngfx-surface, [ngfx-surface]',
@@ -37,7 +37,7 @@ export class NgFxSurfaceComponent implements OnInit, OnChanges {
     });
   }
 
-  sanitize(style: string) {
+  sanitize(style: string): SafeStyle {
     return this._sanitizer.bypassSecurityTrustStyle(style);
   }
 
