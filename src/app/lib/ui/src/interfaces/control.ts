@@ -1,3 +1,5 @@
+import { SafeStyle } from '@angular/platform-browser/src/security/dom_sanitization_service';
+
 export interface NgFxControl {
   type: string;
   name: string;
@@ -6,6 +8,7 @@ export interface NgFxControl {
   max?: number | number[];
   isActive?: boolean;
   hasUserInput?: boolean;
+  hasRemoteInput?: boolean;
   currentValue?: number | number[] | boolean | string;
   position?: string;
   x?: number;
@@ -14,6 +17,6 @@ export interface NgFxControl {
   width?: number;
   timeStamp?: Date | number;
   snapToCenter?: boolean;
-  column?: string;
-  row?: string;
+  gridArea?: string;
+  placeSelf?: string;
 }

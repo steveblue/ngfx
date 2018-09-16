@@ -1,5 +1,5 @@
 <div class="ngfx__title" [hidden]="!hasName()">
   <span class="control__name">{{control.name.charAt(0).toUpperCase()}}</span>
-  <span class="slave__indicator" [ngClass]="{'is--visible': control.hasUserInput === true }"></span>
+  <span class="slave__indicator" [ngClass]="{'is--visible': control.hasRemoteInput === true }"></span>
 </div>
 <div class="ngfx__button" [ngClass]="{'is--active' : control.currentValue === true }"></div>

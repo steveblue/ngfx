@@ -10,9 +10,13 @@ import { NgFxDataChannel } from './../../../lib/rtc/src/services/data-channel/da
   styleUrls: ['./controller.component.css']
 })
 export class ControllerComponent implements OnInit {
+  grid: string;
+  gridGap: string;
   hasPulse = false;
   constructor(public controller: NgFxController, private _client: NgFxDataChannel, private _ref: ChangeDetectorRef) {
     // TODO: test with fetching initial data, then hook up with DataChannel
+    this.grid = 'auto 200px / 200px auto 200px';
+    this.gridGap = '20px 20px';
     this._client.config.key = 'AFXGD';
     this._client.emitter.subscribe(msg => {
       if (msg === 'open') {
@@ -28,8 +32,7 @@ export class ControllerComponent implements OnInit {
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,
-        column: '0',
-        row: '9'
+        gridArea: '2 / 1 / 3 / 2'
       },
       joyRight: {
         type: 'slider',
@@ -38,8 +41,7 @@ export class ControllerComponent implements OnInit {
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,
-        column: '16',
-        row: '9'
+        gridArea: '2 / 3 / 3 / 4'
       }
     });
   }

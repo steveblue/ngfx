@@ -34,7 +34,7 @@ $handle-bg: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAeh
     border-radius: 14px;
     cursor: $handle-bg 0 0, pointer;
     &.is--active {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.5);
     }
   }

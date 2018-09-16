@@ -15,14 +15,12 @@ export class NgFxDraggableDirective implements OnInit {
   private _timeout: number;
   private _animation: Animation;
   private _lastPos: AnimationKeyFrame;
-  public cancelMaster: boolean;
 
   @Input('control')
   control: NgFxControl;
 
   constructor(private _el: ElementRef, private _controller: NgFxController) {
     this._elem = _el.nativeElement;
-    this.cancelMaster = true;
   }
 
   ngOnInit() {
@@ -58,13 +56,12 @@ export class NgFxDraggableDirective implements OnInit {
   onMouseEnter(e: MouseEvent) {
     if (this.control.isActive) {
       this.control.hasUserInput = true;
-      this.cancelMaster = true;
     }
   }
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(e: TouchEvent) {
-    this.cancelMaster = true;
+    this.control.hasUserInput = true;
     this.onTouchDown(e);
   }
 
@@ -119,7 +116,7 @@ export class NgFxDraggableDirective implements OnInit {
   onTouchMove(e: TouchEvent) {
     e.preventDefault();
 
-    this._handle.style.opacity = '0.5';
+    this._handle.style.opacity = '0.8';
 
     if (this._touchItem === null) {
       this._touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
@@ -155,18 +152,20 @@ export class NgFxDraggableDirective implements OnInit {
 
     this.control.timeStamp = e.timeStamp;
 
-    this.repeatEvent();
+    this.onEvent();
   }
 
   onMouseMove(e: MouseEvent) {
     const parent = <HTMLElement>(<HTMLElement>e.target).parentNode;
-
+    if (!this.control.isActive) {
+      return;
+    }
     if (this.control.isActive && parent === this._elem) {
-      this._handle.style.opacity = '0.5';
+      this._handle.style.opacity = '0.8';
       this.control.x = e.offsetX;
       this.control.y = e.offsetY;
     } else {
-      this._handle.style.opacity = '0.5';
+      this._handle.style.opacity = '0.8';
       this.control.x = (this._elem.getBoundingClientRect().left - e.offsetX) * -1;
       this.control.y = (this._elem.getBoundingClientRect().top - e.offsetY) * -1;
     }
@@ -201,7 +200,7 @@ export class NgFxDraggableDirective implements OnInit {
 
       this.control.timeStamp = e.timeStamp;
 
-      this.repeatEvent();
+      this.onEvent();
     }
   }
 
@@ -210,7 +209,7 @@ export class NgFxDraggableDirective implements OnInit {
   onMouseUp(e: MouseEvent | TouchEvent) {
     this.control.isActive = false;
     this.control.hasUserInput = false;
-    this._handle.style.opacity = '';
+    this._handle.style.opacity = '0.3';
 
     if ('ontouchstart' in document.documentElement) {
       this._touchItem = null;
@@ -228,13 +227,6 @@ export class NgFxDraggableDirective implements OnInit {
       this.control.y = center[1];
       this.setPosition(center[0], center[1]);
     }
-
-    this._controller.onEvent.emit({
-      type: 'change',
-      control: this.control
-    });
-
-    this.cancelMaster = false;
   }
 
   @HostListener('touchend', ['$event'])
@@ -242,21 +234,22 @@ export class NgFxDraggableDirective implements OnInit {
     this.onMouseUp(e);
   }
 
-  repeatEvent() {
-    clearTimeout(this._timeout);
-    this._controller.onEvent.emit({
-      type: 'change',
-      control: this.control
-    });
-
-    if (this.control.isActive === false) {
-      this._timeout = window.setTimeout(() => {
-        this._controller.onEvent.emit({
-          type: 'change',
-          endFrame: true,
-          control: this.control
-        });
-      }, 300);
+  onEvent() {
+    // clearTimeout(this._timeout);
+    if (this.control.isActive) {
+      // console.warn('repeat');
+      this._controller.onEvent.emit({
+        type: 'change',
+        endFrame: true,
+        control: this.control
+      });
+      // this._timeout = window.setTimeout(() => {
+      //   this._controller.onEvent.emit({
+      //     type: 'change',
+      //     endFrame: true,
+      //     control: this.control
+      //   });
+      // }, 100);
     }
   }
 

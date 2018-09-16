@@ -1,6 +1,8 @@
 import { Component, Input, HostBinding, HostListener } from '@angular/core';
 import { NgFxControl } from './../../interfaces/control';
 import { NgFxController } from './../../services/controller/controller.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { SafeStyle } from 'dist/ngfx/lib/@angular/platform-browser';
 
 @Component({
   selector: 'ngfx-button, [ngfx-button]',
@@ -14,14 +16,14 @@ export class NgFxButtonComponent {
   @Input('control')
   control: NgFxControl;
 
-  @HostBinding('style.grid-column')
-  get gridColumn(): string {
-    return this.control.column || '';
+  @HostBinding('style.grid-area')
+  get gridArea(): SafeStyle {
+    return this.sanitize(this.control.gridArea) || this.sanitize('');
   }
 
-  @HostBinding('style.grid-row')
-  get gridRow(): string {
-    return this.control.row || '';
+  @HostBinding('style.place-self')
+  get placeSelf(): SafeStyle {
+    return this.sanitize(this.control.placeSelf) || this.sanitize('');
   }
 
   @HostListener('mouseup', ['$event'])
@@ -45,7 +47,7 @@ export class NgFxButtonComponent {
     this.setActive();
   }
 
-  constructor(private _controller: NgFxController) {}
+  constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
 
   setActive() {
     this.control.currentValue = true;
@@ -58,5 +60,9 @@ export class NgFxButtonComponent {
 
   hasName() {
     return this.control.name !== undefined && this.control.name.length > 0;
+  }
+
+  sanitize(style: string) {
+    return this._sanitizer.bypassSecurityTrustStyle(style);
   }
 }

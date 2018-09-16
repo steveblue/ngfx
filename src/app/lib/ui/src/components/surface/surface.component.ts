@@ -1,6 +1,7 @@
 import { Component, HostBinding, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgFxController } from '../../services/controller/controller.service';
 import { NgFxControl } from './../../../src/interfaces/control';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngfx-surface, [ngfx-surface]',
@@ -11,21 +12,23 @@ export class NgFxSurfaceComponent implements OnInit, OnChanges {
   @Input('controller')
   controller: string;
 
-  @Input('columns')
-  columns: string;
+  @Input('grid')
+  grid: string;
 
-  @Input('rows')
-  rows: string;
+  @Input('gridGap')
+  gridGap: string;
+
+  @Input('display')
+  display: string;
 
   controlMap: NgFxControl[] = new Array();
 
-  constructor(private _controller: NgFxController) {}
+  constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.controller) {
       this.controlMap = this.mapToControls(changes.controller.currentValue);
     }
-    console.log(changes);
   }
 
   mapToControls(key: string) {
@@ -33,5 +36,10 @@ export class NgFxSurfaceComponent implements OnInit, OnChanges {
       return this._controller.surfaces[key].controls[prop];
     });
   }
+
+  sanitize(style: string) {
+    return this._sanitizer.bypassSecurityTrustStyle(style);
+  }
+
   ngOnInit() {}
 }
