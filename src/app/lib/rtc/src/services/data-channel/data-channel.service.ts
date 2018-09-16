@@ -21,7 +21,7 @@ export interface NgFxDataChannelMessage {
   data?: any;
 }
 
-export interface NgfxDataChannelPeer {
+export interface NgFxDataChannelPeer {
   peerConnection: RTCPeerConnection;
   id: string;
   key: string;
@@ -31,7 +31,7 @@ export interface NgfxDataChannelPeer {
 }
 
 export interface NgFxDataChannelPeerMap {
-  [key: string]: NgfxDataChannelPeer;
+  [key: string]: NgFxDataChannelPeer;
 }
 
 export interface NgFxDataChannelStore {
@@ -335,7 +335,7 @@ export class NgFxDataChannel {
     }
   }
 
-  onICEStateChange(ev: NgfxDataChannelPeer) {
+  onICEStateChange(ev: NgFxDataChannelPeer) {
     if (this.debug) {
       console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
     }

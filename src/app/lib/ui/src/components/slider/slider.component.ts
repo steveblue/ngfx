@@ -3,7 +3,7 @@ import { NgFxControl } from './../../interfaces/control';
 import { NgFxDraggableDirective } from './draggable.directive';
 
 @Component({
-  selector: 'ngfx-slider',
+  selector: 'ngfx-slider, [ngfx-slider]',
   templateUrl: 'slider.component.html',
   styleUrls: ['slider.component.css']
 })

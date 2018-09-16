@@ -1,15 +1,21 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgFxController } from '../../services/controller/controller.service';
 import { NgFxControl } from './../../../src/interfaces/control';
 
 @Component({
-  selector: 'ngfx-surface',
+  selector: 'ngfx-surface, [ngfx-surface]',
   templateUrl: './surface.component.html',
   styleUrls: ['./surface.component.css']
 })
-export class NgfxSurfaceComponent implements OnInit, OnChanges {
+export class NgFxSurfaceComponent implements OnInit, OnChanges {
   @Input('controller')
   controller: string;
+
+  @Input('columns')
+  columns: string;
+
+  @Input('rows')
+  rows: string;
 
   controlMap: NgFxControl[] = new Array();
 
@@ -19,6 +25,7 @@ export class NgfxSurfaceComponent implements OnInit, OnChanges {
     if (changes.controller) {
       this.controlMap = this.mapToControls(changes.controller.currentValue);
     }
+    console.log(changes);
   }
 
   mapToControls(key: string) {

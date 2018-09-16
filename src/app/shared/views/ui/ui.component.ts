@@ -33,6 +33,12 @@ export class UiComponent implements OnInit {
         orient: 'is--hor',
         min: 0,
         max: 1000
+      },
+      button: {
+        type: 'button',
+        name: 'b',
+        column: '3',
+        row: '2'
       }
     });
   }

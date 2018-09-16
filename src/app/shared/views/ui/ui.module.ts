@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { UiComponent } from './ui.component';
 import { NgFxController } from './../../../lib/ui/src/services/controller/controller.service';
 import { NgFxSliderModule } from './../../../lib/ui/src/components/slider/slider.module';
-import { NgfxSurfaceModule } from './../../../lib/ui/src/components/surface/surface.module';
+import { NgFxSurfaceModule } from './../../../lib/ui/src/components/surface/surface.module';
+import { NgFxButtonModule } from './../../../lib/ui/src/components/button/button.module';
 
 @NgModule({
-  imports: [CommonModule, NgFxSliderModule, NgfxSurfaceModule],
+  imports: [CommonModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule],
   declarations: [UiComponent],
   providers: [NgFxController]
 })

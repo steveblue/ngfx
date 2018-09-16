@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgfxSurfaceComponent } from './surface.component';
+import { NgFxSurfaceComponent } from './surface.component';
 import { NgFxSliderModule } from './../slider/slider.module';
+import { NgFxButtonModule } from './../button/button.module';
 
 export * from './surface.component';
 
 @NgModule({
-  imports: [CommonModule, NgFxSliderModule],
-  declarations: [NgfxSurfaceComponent],
-  exports: [NgfxSurfaceComponent]
+  imports: [CommonModule, NgFxSliderModule, NgFxButtonModule],
+  declarations: [NgFxSurfaceComponent],
+  exports: [NgFxSurfaceComponent]
 })
-export class NgfxSurfaceModule {}
+export class NgFxSurfaceModule {}

@@ -1,6 +1,10 @@
-<div class="control__group">
-  <div class="control__pane" *ngFor="let control of controlMap" [style.grid-column]="control.column || ''"
+<div class="control__group"
+      [style.grid-template-columns]="columns"
+      [style.grid-template-rows]="rows">
+  <div class="control__pane" *ngFor="let control of controlMap"
+    [style.grid-column]="control.column || ''"
     [style.grid-row]="control.row || ''">
     <ngfx-slider *ngIf="control.type === 'slider'" [control]="control"></ngfx-slider>
+    <ngfx-button *ngIf="control.type === 'button'" [control]="control"></ngfx-button>
   </div>
 </div>

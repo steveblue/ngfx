@@ -11,12 +11,12 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
   @include clearfix();
 
   .ngfx__slider {
-    .ngfx__slider__title {
+    .ngfx__title {
       width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: center;
-      transform: translateY(-8px);
+      transform: translateY(0px);
       .control__name {
         color: rgba(255, 255, 255, 0.3);
         font-size: 12px;
@@ -40,6 +40,7 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
       z-index: 1000;
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
+      transform: translateY(8px);
       .ngfx__range {
         width: 100%;
         height: 100%;
