@@ -9,7 +9,7 @@ const DataChannelConfig = {
   signalServer: `wss://localhost:4444/signal`,
   announceServer: `wss://localhost:4444/announce`,
   messageServer: `wss://localhost:4444/message`,
-  debug: false
+  debug: true
 };
 
 @NgModule({

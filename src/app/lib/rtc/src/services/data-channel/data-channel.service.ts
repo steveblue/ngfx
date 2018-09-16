@@ -151,7 +151,13 @@ export class NgFxDataChannel {
         }
         this.sendAnnounce();
       }
-    }, 1000);
+    }, 2500);
+  }
+
+  checkForPeers() {
+    if (Object.keys(this.connections).length === 0) {
+      this.sendPulse();
+    }
   }
 
   sendAnnounce() {
@@ -174,7 +180,9 @@ export class NgFxDataChannel {
 
   onAnnounce(msg: MessageEvent) {
     const ev = JSON.parse(msg.data);
-    console.log('announce:', msg);
+    if (this.debug) {
+      console.log('announce:', msg);
+    }
     if (!this.connections[ev.id]) {
       this.connect(ev);
       this.sendOffer(ev);
@@ -268,14 +276,19 @@ export class NgFxDataChannel {
   }
 
   onICEChange(id: string, ev: any) {
+    // console.warn('ice change:', id, ev);
     if (this.debug) {
       console.log(`${id} ice ${ev.target.iceConnectionState}`);
+    }
+    if (ev.target.iceConnectionState === 'disconnected' || ev.target.iceConnectionState === 'failed') {
+      delete this.connections[id];
+      this.checkForPeers();
     }
   }
 
   onICEStateChange(ev: any) {
+    console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
     if (this.debug) {
-      console.log('ice state:', this.connections[ev.id].peerConnection.iceConnectionState);
     }
     if (this.connections[ev.id].peerConnection.iceConnectionState === 'disconnected') {
       if (this.debug) {

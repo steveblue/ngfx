@@ -16,6 +16,7 @@ export class RtcComponent implements OnInit {
     this._client.config.key = 'newRoom';
     this._client.emitter.subscribe(msg => {
       if (msg === 'open') {
+        console.log('data channel open');
         this.messages.push(msg);
         this._client.send({ message: 'ping' });
         this._ref.detectChanges();
