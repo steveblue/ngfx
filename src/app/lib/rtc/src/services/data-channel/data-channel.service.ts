@@ -270,8 +270,9 @@ export class NgFxDataChannel {
     (async () => {
       const offer = this.connections[ev.id].peerConnection.createOffer();
       offer.catch(err => console.error('error creating offer', err));
-      this.connections[ev.id].peerConnection.setLocalDescription(await offer);
-      this.sendSignal(ev, await offer);
+      const newOffer = await offer;
+      this.connections[ev.id].peerConnection.setLocalDescription(newOffer);
+      this.sendSignal(ev, newOffer);
     })();
   }
 
@@ -304,8 +305,9 @@ export class NgFxDataChannel {
       }
       const answer = this.connections[ev.id].peerConnection.createAnswer();
       answer.catch(err => console.error('error creating answer', err));
-      this.connections[ev.id].peerConnection.setLocalDescription(await answer);
-      this.sendSignal(ev, await answer);
+      const newAnswer = await answer;
+      this.connections[ev.id].peerConnection.setLocalDescription(newAnswer);
+      this.sendSignal(ev, newAnswer);
     })();
   }
 
