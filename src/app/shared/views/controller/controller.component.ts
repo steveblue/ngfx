@@ -15,8 +15,8 @@ export class ControllerComponent implements OnInit {
   hasPulse = false;
   constructor(public controller: NgFxController, private _client: NgFxDataChannel, private _ref: ChangeDetectorRef) {
     // TODO: test with fetching initial data, then hook up with DataChannel
-    this.grid = 'auto 200px / 200px auto 200px';
-    this.gridGap = '20px 20px';
+    this.grid = 'auto 240px / 240px auto 240px';
+    this.gridGap = '0px 0px';
     this._client.config.key = 'AFXGD';
     this._client.emitter.subscribe(msg => {
       if (msg === 'open') {
@@ -32,7 +32,9 @@ export class ControllerComponent implements OnInit {
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,
-        gridArea: '2 / 1 / 3 / 2'
+        gridArea: '2 / 1 / 3 / 2',
+        placeSelf: 'center center',
+        transform: 'translateY(-6px)'
       },
       joyRight: {
         type: 'slider',
@@ -41,7 +43,9 @@ export class ControllerComponent implements OnInit {
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,
-        gridArea: '2 / 3 / 3 / 4'
+        gridArea: '2 / 3 / 3 / 4',
+        placeSelf: 'center center',
+        transform: 'translateY(-6px)'
       }
     });
   }

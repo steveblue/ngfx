@@ -15,6 +15,11 @@ export class NgFxButtonComponent {
   @Input('control')
   control: NgFxControl;
 
+  @HostBinding('style.transform')
+  get transform(): SafeStyle {
+    return this.sanitize(this.control.transform) || this.sanitize('');
+  }
+
   @HostBinding('style.grid-area')
   get gridArea(): SafeStyle {
     return this.sanitize(this.control.gridArea) || this.sanitize('');
@@ -26,7 +31,7 @@ export class NgFxButtonComponent {
   }
 
   @HostListener('mouseup', ['$event'])
-  onMouseup(event: MouseEvent) {
+  onMouseup(event: MouseEvent | TouchEvent) {
     this.onHold = false;
     this.control.currentValue = false;
     this.control.hasUserInput = false;
@@ -38,12 +43,22 @@ export class NgFxButtonComponent {
   }
 
   @HostListener('mousedown', ['$event'])
-  onMousedown(event: MouseEvent) {
+  onMousedown(event: MouseEvent | TouchEvent) {
     this.onHold = true;
     this._holdInterval = window.setInterval(() => {
       this.setActive();
     }, 200);
     this.setActive();
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(e: TouchEvent) {
+    this.onMousedown(e);
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(e: TouchEvent) {
+    this.onMouseup(e);
   }
 
   constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}

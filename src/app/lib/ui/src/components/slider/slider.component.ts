@@ -14,6 +14,11 @@ export class NgFxSliderComponent {
   @ViewChild(NgFxDraggableDirective)
   draggable: NgFxDraggableDirective;
 
+  @HostBinding('style.transform')
+  get transform(): SafeStyle {
+    return this.sanitize(this.control.transform) || this.sanitize('');
+  }
+
   @HostBinding('style.grid-area')
   get gridArea(): SafeStyle {
     return this.sanitize(this.control.gridArea) || this.sanitize('');

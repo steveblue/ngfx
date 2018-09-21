@@ -19,4 +19,5 @@ export interface NgFxControl {
   snapToCenter?: boolean;
   gridArea?: string;
   placeSelf?: string;
+  transform?: string;
 }

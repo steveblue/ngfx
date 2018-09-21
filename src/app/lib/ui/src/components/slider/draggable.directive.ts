@@ -110,8 +110,6 @@ export class NgFxDraggableDirective implements OnInit {
     this.setPosition(this.control.x, this.control.y);
   }
 
-  // TODO: figure out why correct currentValue is not being set
-
   // Handle drag event
   onTouchMove(e: TouchEvent) {
     e.preventDefault();

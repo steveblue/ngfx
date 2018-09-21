@@ -296,7 +296,7 @@ export class NgFxDataChannel {
       if (isSafari) {
         // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel
         navigator.getUserMedia(
-          { audio: true, video: { width: 1280, height: 720 } },
+          { audio: false, video: { width: 1280, height: 720 } },
           stream => {},
           err => {
             console.log('error: ' + err.name);
@@ -356,14 +356,14 @@ export class NgFxDataChannel {
       }
       return;
     }
-    const event = {
+    const evt = {
       id: this.config.id
     };
     if (candidate) {
       if (this.debug) {
-        console.log('sending candidate:', event, candidate);
+        console.log('sending candidate:', evt, candidate);
       }
-      this.sendSignal(event, candidate);
+      this.sendSignal(evt, candidate);
     } else {
       if (this.debug) {
         console.log('all candidates sent');
