@@ -9,9 +9,10 @@
   },
   "keywords": [
     "webrtc",
+    "rtc",
     "datachannel",
+    "data channel",
     "websocket",
-    "ui",
     "front end",
     "angular",
     "service"
