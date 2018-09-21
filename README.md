@@ -4,7 +4,7 @@
 
 #### Angular Component Library
 
-This repository is a development environment for the `@ngfx` Component library. This project includes patterns for UI development that keep popping up in the course of developing creative applications using Angular.
+This repository is a development environment for the `@ngfx` Component library. This project contains Angular library packages for connecting touch based UI controls over WebRTC DataChannel. More packages for working with canvas, WebGL, audio, and video coming soon.
 
 ## Packages
 
@@ -19,7 +19,7 @@ NEW in 1.0.0-beta.3!
 
 Sliders, joysticks, and buttons transmit messages over WebRTC DataChannel with `@ngfx/rtc`.
 
-![Example of UI Contoller built with @ngfx/ui](assets/ui-controls.png)
+![Example of UI Controller built with @ngfx/ui](assets/ui-controls.png)
 
 ## Install
 
