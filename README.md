@@ -11,7 +11,15 @@ This repository is a development environment for the `@ngfx` Component library. 
 | Package | Description                                          |
 | ------- | :--------------------------------------------------- |
 | rtc     | A service for connecting p2p over WebRTC DataChannel |
-| ui      | UI Component library for creative applications       |
+| ui      | UI component library for gaming and creative apps    |
+
+## NgFxControl
+
+![Example of UI Contoller built with @ngfx/ui](assets/ui-controls.png)
+
+NEW in 1.0.0-beta.3!
+
+Sliders, joysticks, and buttons transmit messages over WebRTC DataChannel with `@ngfx/rtc`.
 
 ## Install
 
