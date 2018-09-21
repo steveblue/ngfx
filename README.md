@@ -15,11 +15,11 @@ This repository is a development environment for the `@ngfx` Component library. 
 
 ## NgFxControl
 
-![Example of UI Contoller built with @ngfx/ui](assets/ui-controls.png)
-
 NEW in 1.0.0-beta.3!
 
 Sliders, joysticks, and buttons transmit messages over WebRTC DataChannel with `@ngfx/rtc`.
+
+![Example of UI Contoller built with @ngfx/ui](assets/ui-controls.png)
 
 ## Install
 
