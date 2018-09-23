@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.0-beta.4
+
+- UPDATE look and feel of handles on NgFxSliderComponent
+
 ## 1.0.0-beta.3
 
 - NEW @ngfx/ui package includes UI Components

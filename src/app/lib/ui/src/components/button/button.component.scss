@@ -1,4 +1,4 @@
-$handle-bg: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAACEUlEQVRYhe2Z646CMBBGTwusl/d/VnUV6P6Yjq0V5KJISfZLSCMBPYxfp2XGOOd4QwYo/GH9YZJrHND6o/HH7B8t37iv8qNCKkQKY6JR4Wvg5sdJMhMjXAI7Pxr/41OjZQgPUQO/TAAfC2yAAxJVENBPyPrxBlzGfO8Y4AqBtYj/llCBwJ4R+F4NAf8gsPC5qPZJo31BbPLyoi7tgCNhoiwtnQ8HYN93UR+wRnbOpHpHDrHdHgnYk7qASySy34aN1SIBe0q7KbAh2GAtWAg2PJIsRCnw3p/7hmeH5BCWQ3wyBi4R7y6VuuaoIayowCNwp8kz0Z1NgQvkKXKwQqoWYSshAP+shjNeFQTgknWzwpAcfsNlCVvE3IEtUFjEv1tRoW8JW9HmgE36epOzHB54U/oHXlqaf9NaQo4ygMtlKzlWmwNulnx1X0KNRaouLXn7WKtMjWaJmvyBa7yHAa4rwozVDUIebpAnyDEvq21r/aDqLQ+tLEPEFgPXiDVy2h8XCNO9HJtaQEueOUxA3UVe4pMpsANOdJf+vynjGU4kC1vXJKuROu2aE9DSUyvu63GoydeoYBa8qBG/asroDXvCSrOk1AZnXmSsXFoGus29MLCIjW3KWCTSm2jKxKqQspZaaU4dOW17XRloxDzcPLMTmjYWY3V9YZwitbGozcVJmgscgyh0wWP0VPovNIT27WxL/QG7cp5Q+WnBUwAAAABJRU5ErkJggg==');
+$handle-bg: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='44px' height='44px' viewBox='0 0 44 44' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='touch-indicator' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.3'%3e%3ccircle id='joystick-handle' fill='%23FFFFFF' fill-opacity='0.3' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
 
 :host {
   display: flex;
@@ -32,7 +32,8 @@ $handle-bg: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAeh
     min-height: 32px;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 14px;
-    cursor: $handle-bg 0 0, pointer;
+    // cursor: $handle-bg 0 0, pointer;
+    cursor: pointer;
     &.is--active {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.5);

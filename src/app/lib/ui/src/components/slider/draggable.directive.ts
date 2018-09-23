@@ -114,14 +114,14 @@ export class NgFxDraggableDirective implements OnInit {
   onTouchMove(e: TouchEvent) {
     e.preventDefault();
 
-    this._handle.style.opacity = '0.8';
+    // this._handle.style.opacity = '0.8';
 
     if (this._touchItem === null) {
       this._touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
     }
 
-    this.control.x = e.touches[this._touchItem].pageX - this._rect.left - 22;
-    this.control.y = e.touches[this._touchItem].pageY - this._rect.top - 66;
+    this.control.x = e.touches[this._touchItem].pageX - this._rect.left; // - 22; // TODO: figure out why these artificial offsets are here
+    this.control.y = e.touches[this._touchItem].pageY - this._rect.top; // - 66; // TODO: figure out why these artificial offsets are here
 
     this.setPosition(this.control.x, this.control.y);
 
@@ -159,11 +159,11 @@ export class NgFxDraggableDirective implements OnInit {
       return;
     }
     if (this.control.isActive && parent === this._elem) {
-      this._handle.style.opacity = '0.8';
+      // this._handle.style.opacity = '0.8';
       this.control.x = e.offsetX;
       this.control.y = e.offsetY;
     } else {
-      this._handle.style.opacity = '0.8';
+      // this._handle.style.opacity = '0.8';
       this.control.x = (this._elem.getBoundingClientRect().left - e.offsetX) * -1;
       this.control.y = (this._elem.getBoundingClientRect().top - e.offsetY) * -1;
     }
@@ -207,7 +207,7 @@ export class NgFxDraggableDirective implements OnInit {
   onMouseUp(e: MouseEvent | TouchEvent) {
     this.control.isActive = false;
     this.control.hasUserInput = false;
-    this._handle.style.opacity = '0.3';
+    // this._handle.style.opacity = '0.3';
 
     if ('ontouchstart' in document.documentElement) {
       this._touchItem = null;
