@@ -123,34 +123,12 @@ export class NgFxDraggableDirective implements OnInit {
     this.control.x = e.touches[this._touchItem].pageX - this._rect.left; // - 22; // TODO: figure out why these artificial offsets are here
     this.control.y = e.touches[this._touchItem].pageY - this._rect.top; // - 66; // TODO: figure out why these artificial offsets are here
 
-    this.setPosition(this.control.x, this.control.y);
-
-    if (this.control.orient === 'is--hor') {
-      this.control.currentValue = this.scale(
-        this.control.x,
-        0,
-        this.control.width - 44,
-        <number>this.control.min,
-        <number>this.control.max
-      );
-    } else if (this.control.orient === 'is--vert') {
-      this.control.currentValue = this.scale(
-        this.control.y,
-        0,
-        this.control.height - 44,
-        <number>this.control.min,
-        <number>this.control.max
-      );
-    } else if (this.control.orient === 'is--joystick') {
-      this.control.currentValue = [
-        this.scale(this.control.x, 0, this.control.width - 44, this.control.min[0], this.control.max[0]),
-        this.scale(this.control.y, 0, this.control.height - 44, this.control.min[1], this.control.max[1])
-      ];
+    if (this.control.hasUserInput && this.control.isActive) {
+      this.setPosition(this.control.x, this.control.y);
+      this.setValue();
+      this.control.timeStamp = e.timeStamp;
+      this.onEvent();
     }
-
-    this.control.timeStamp = e.timeStamp;
-
-    this.onEvent();
   }
 
   onMouseMove(e: MouseEvent) {
@@ -170,34 +148,8 @@ export class NgFxDraggableDirective implements OnInit {
 
     if (this.control.hasUserInput && this.control.isActive) {
       this.setPosition(this.control.x, this.control.y);
-
-      if (this.control.orient === 'is--hor') {
-        this.control.currentValue = this.scale(
-          this.control.x,
-          0,
-          this.control.width - 44,
-          <number>this.control.min,
-          <number>this.control.max
-        );
-      }
-      if (this.control.orient === 'is--vert') {
-        this.control.currentValue = this.scale(
-          this.control.y,
-          0,
-          this.control.height - 44,
-          <number>this.control.min,
-          <number>this.control.max
-        );
-      }
-      if (this.control.orient === 'is--joystick') {
-        this.control.currentValue = [
-          this.scale(this.control.x, 0, this.control.width - 44, this.control.min[0], this.control.max[0]),
-          this.scale(this.control.y, 0, this.control.height - 44, this.control.min[1], this.control.max[1])
-        ];
-      }
-
+      this.setValue();
       this.control.timeStamp = e.timeStamp;
-
       this.onEvent();
     }
   }
@@ -233,21 +185,12 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   onEvent() {
-    // clearTimeout(this._timeout);
     if (this.control.isActive) {
-      // console.warn('repeat');
       this._controller.onEvent.emit({
         type: 'change',
         endFrame: true,
         control: this.control
       });
-      // this._timeout = window.setTimeout(() => {
-      //   this._controller.onEvent.emit({
-      //     type: 'change',
-      //     endFrame: true,
-      //     control: this.control
-      //   });
-      // }, 100);
     }
   }
 
@@ -302,9 +245,67 @@ export class NgFxDraggableDirective implements OnInit {
     this._handle.style.transform = 'matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,' + positions[0] + ',' + positions[1] + ',0,1)';
   }
 
+  // set currentValue on control
+
+  clampSlider(val: number) {
+    if (val < this.control.min) {
+      return this.control.min;
+    }
+    if (val > this.control.max) {
+      return this.control.max;
+    }
+    return val;
+  }
+
+  clampJoystickX(val: number) {
+    if (val < this.control.min[0]) {
+      return this.control.min[0];
+    }
+    if (val > this.control.max[0]) {
+      return this.control.max[0];
+    }
+    return val;
+  }
+
+  clampJoystickY(val: number) {
+    if (val < this.control.min[1]) {
+      return this.control.min[1];
+    }
+    if (val > this.control.max[1]) {
+      return this.control.max[1];
+    }
+    return val;
+  }
+
+  setValue() {
+    if (this.control.orient === 'is--hor') {
+      this.control.currentValue = this.clampSlider(
+        this.scale(this.control.x, 0, this.control.width - 44, <number>this.control.min, <number>this.control.max)
+      );
+    }
+    if (this.control.orient === 'is--vert') {
+      this.control.currentValue = this.clampSlider(
+        this.scale(this.control.y, 0, this.control.height - 44, <number>this.control.min, <number>this.control.max)
+      );
+    }
+    if (this.control.orient === 'is--joystick') {
+      this.control.currentValue = [
+        this.clampJoystickX(this.scale(this.control.x, 0, this.control.width - 44, this.control.min[0], this.control.max[0])),
+        this.clampJoystickY(this.scale(this.control.y, 0, this.control.height - 44, this.control.min[1], this.control.max[1]))
+      ];
+    }
+  }
+
   // Move handle, within elem
 
   setPosition(x: number, y: number) {
+    const clampPos = (val: number) => {
+      if (val < 0) {
+        val = 0;
+      }
+      return val;
+    };
+
     if (this.control.orient === 'is--joystick') {
       this._joystickPos = this.circularBounds(
         this.control.x,
@@ -334,7 +335,7 @@ export class NgFxDraggableDirective implements OnInit {
         this.control.y = y;
       }
 
-      this.control.position = 'translate(' + this.control.x + 'px' + ',' + this.control.y + 'px' + ')';
+      this.control.position = 'translate(' + clampPos(this.control.x) + 'px' + ',' + clampPos(this.control.y) + 'px' + ')';
       this.setActualPosition(this.control.position);
     }
   }

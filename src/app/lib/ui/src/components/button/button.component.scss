@@ -1,5 +1,3 @@
-$handle-bg: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='44px' height='44px' viewBox='0 0 44 44' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='touch-indicator' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.3'%3e%3ccircle id='joystick-handle' fill='%23FFFFFF' fill-opacity='0.3' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
-
 :host {
   display: flex;
   flex-direction: column;
@@ -26,17 +24,38 @@ $handle-bg: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding
         display: block;
       }
     }
+    &.is--small {
+      .control__name {
+        font-size: 10px;
+      }
+    }
   }
   .ngfx__button {
     width: 100%;
     min-height: 32px;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 14px;
-    // cursor: $handle-bg 0 0, pointer;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ngfx__button__icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+    }
+    &.is--small {
+      min-height: 18px;
+      border-radius: 8px;
+      .ngfx__button__icon {
+        display: block;
+        width: 12px;
+        height: 12px;
+      }
+    }
     &.is--active {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid transparent;
     }
   }
 }

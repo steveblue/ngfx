@@ -27,13 +27,13 @@ export class NgFxToggleComponent {
     return this.sanitize(this.control.placeSelf) || this.sanitize('');
   }
 
-  @HostListener('mouseup', ['$event'])
-  onMouseup(event: MouseEvent) {
+  @HostListener('mousedown', ['$event'])
+  onMousedown(event: MouseEvent) {
     this.toggleActive();
   }
 
-  @HostListener('touchend', ['$event'])
-  onTouchEnd(e: TouchEvent) {
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(e: TouchEvent) {
     this.toggleActive();
   }
 

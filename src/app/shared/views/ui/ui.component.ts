@@ -25,7 +25,7 @@ export class UiComponent implements OnInit {
         orient: 'is--vert',
         min: 0,
         max: 255,
-        gridArea: '0 / 1 / span 4 / span 1'
+        gridArea: '1 / 1 / span 3 / span 1'
       },
       joyControl: {
         type: 'slider',
@@ -42,7 +42,8 @@ export class UiComponent implements OnInit {
         orient: 'is--hor',
         min: 0,
         max: 1000,
-        gridArea: '1 / 3 / span 3 / span 1'
+        size: 'small',
+        gridArea: '1 / 3 / span 1 / span 3'
       },
       buttonA: {
         type: 'button',
@@ -62,16 +63,19 @@ export class UiComponent implements OnInit {
       buttonX: {
         type: 'button',
         name: 'x',
+        size: 'small',
         gridArea: '3 / 3 / span 1 / span 1'
       },
       buttonY: {
         type: 'button',
         name: 'y',
+        size: 'small',
         gridArea: '3 / 4 / span 1 / span 1'
       },
       buttonZ: {
         type: 'toggle',
         name: 't',
+        size: 'small',
         gridArea: '3 / 5 / span 1 / span 1'
       }
     });

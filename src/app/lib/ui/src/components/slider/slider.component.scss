@@ -1,8 +1,8 @@
 @import 'util/mixins';
 $handle-bg: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='48px' height='48px' viewBox='0 0 48 48' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='touch-indicator' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.1'%3e%3ccircle id='joystick-handle' fill='%23FFFFFF' transformfill-opacity='0.1' transform='translate(3,3)' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
 $hor-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='32px' height='32px' viewBox='0 0 32 32' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='slider-handle-horizonal' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square' stroke-opacity='0.3'%3e%3cg id='Group' transform='translate(16.000000, 16.000000) rotate(90.000000) translate(-16.000000, -16.000000) translate(0.000000, 14.000000)' stroke='%23FFFFFF' stroke-width='2'%3e%3cpath d='M0,2 L30,2' id='Line-Copy'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e");
-$vert-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='32px' height='32px' viewBox='0 0 32 32' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='slider-handle-vertical' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square' stroke-opacity='0.3'%3e%3cg id='Group' transform='translate(0.000000, 13.000000)' stroke='%23FFFFFF' stroke-width='2'%3e%3cpath d='M0,2 L30,2' id='Line-Copy'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e");
-$joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='44px' height='44px' viewBox='0 0 44 44' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='joystick-handle' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.3'%3e%3ccircle stroke='%23FFFFFF' stroke-width='2' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
+$vert-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='34px' height='34px' viewBox='0 0 34 34' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='slider-handle-vertical' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square' stroke-opacity='0.3'%3e%3cg id='Group' transform='translate(0.000000, 13.000000)' stroke='%23FFFFFF' stroke-width='2'%3e%3cpath d='M0,2 L30,2' id='Line-Copy'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e");
+$joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='44px' height='44px' viewBox='0 0 44 44' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='joystick-handle' stroke='none' stroke-width='1' fill='%23FFFFFF' fill-opacity='0.3' fill-rule='evenodd' stroke-opacity='0.0'%3e%3ccircle stroke='%23FFFFFF' stroke-width='2' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
 :host {
   display: block;
   // max-width: 240px;
@@ -37,14 +37,14 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
     .ngfx__draggable {
       display: block;
       z-index: 1000;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      // border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       transform: translateY(8px);
       cursor: pointer;
-      &.is--active {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.5);
-      }
+      // &.is--active {
+      // border: 2px solid rgba(255, 255, 255, 0.5);
+      // }
       .ngfx__range {
         width: 100%;
         height: 100%;
@@ -60,11 +60,21 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
         pointer-events: none;
       }
     }
+
+    &.is--small {
+      .ngfx__draggable {
+        border: none;
+        &.is--active {
+          border: none;
+        }
+      }
+    }
+
     &.is--hor {
-      width: 200px;
+      width: 100%;
       height: 32px;
       .ngfx__draggable {
-        width: 200px;
+        width: 100%;
         height: 32px;
         border-radius: 14px;
         cursor: $handle-bg 22 22, pointer;
@@ -74,13 +84,22 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
           background-repeat: no-repeat;
         }
       }
+      &.is--small {
+        width: 100%;
+        height: 12px;
+        .ngfx__draggable {
+          width: 100%;
+          height: 12px;
+          border-radius: 6px;
+        }
+      }
     }
     &.is--vert {
       width: 32px;
-      height: 200px;
+      height: 100%;
       .ngfx__draggable {
         width: 32px;
-        height: 200px;
+        height: 100%;
         border-radius: 14px;
         cursor: $handle-bg 22 0, pointer;
         .ngfx__handle {
@@ -88,6 +107,15 @@ $joy-icon: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding=
           // background-size: 32px 44px;
           background-position: 0px 50%;
           background-repeat: no-repeat;
+        }
+      }
+      &.is--small {
+        width: 12px;
+        height: 100%;
+        .ngfx__draggable {
+          width: 12px;
+          height: 100%;
+          border-radius: 6px;
         }
       }
     }
