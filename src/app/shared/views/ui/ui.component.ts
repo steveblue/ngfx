@@ -70,8 +70,8 @@ export class UiComponent implements OnInit {
         gridArea: '3 / 4 / span 1 / span 1'
       },
       buttonZ: {
-        type: 'button',
-        name: 'z',
+        type: 'toggle',
+        name: 't',
         gridArea: '3 / 5 / span 1 / span 1'
       }
     });

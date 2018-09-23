@@ -5,9 +5,10 @@ import { NgFxController } from './../../../lib/ui/src/services/controller/contro
 import { NgFxSliderModule } from './../../../lib/ui/src/components/slider/slider.module';
 import { NgFxSurfaceModule } from './../../../lib/ui/src/components/surface/surface.module';
 import { NgFxButtonModule } from './../../../lib/ui/src/components/button/button.module';
+import { NgFxToggleModule } from './../../../lib/ui/src/components/toggle/toggle.module';
 
 @NgModule({
-  imports: [CommonModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule],
+  imports: [CommonModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule, NgFxToggleModule],
   declarations: [UiComponent],
   providers: [NgFxController]
 })

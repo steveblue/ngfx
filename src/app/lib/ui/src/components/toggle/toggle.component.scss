@@ -1,0 +1,50 @@
+$handle-bg: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='44px' height='44px' viewBox='0 0 44 44' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cg id='touch-indicator' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.3'%3e%3ccircle id='joystick-handle' fill='%23FFFFFF' fill-opacity='0.3' cx='22' cy='22' r='21'%3e%3c/circle%3e%3c/g%3e%3c/svg%3e");
+
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  .ngfx__title {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    transform: translateY(-4px);
+    .control__name {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .slave__indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50% 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateX(4px) translateY(3px);
+      display: none;
+      &.is--visible {
+        display: block;
+      }
+    }
+  }
+  .ngfx__button {
+    width: 100%;
+    min-height: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    // cursor: $handle-bg 0 0, pointer;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ngfx__button__icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+    }
+    &.is--active {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+  }
+}
