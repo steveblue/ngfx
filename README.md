@@ -19,7 +19,7 @@ NEW in 1.0.0-beta.3!
 
 Sliders, joysticks, and buttons transmit messages over WebRTC DataChannel with `@ngfx/rtc`.
 
-![Example of UI Controller built with @ngfx/ui](assets/ui-controls.png)
+![Example of UI Controller built with @ngfx/ui](assets/light-ui-controls.png)
 
 ## Install
 

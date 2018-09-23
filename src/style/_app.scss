@@ -6,6 +6,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
+  &.is--light {
+    background: #121212;
+    color: #fdfdfd;
+  }
+  &.is--dark {
+    background: #efefef;
+    color: #101010;
+  }
 }
 
 a:link,
