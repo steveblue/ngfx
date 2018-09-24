@@ -25,6 +25,7 @@ export class UiComponent implements OnInit {
         orient: 'is--vert',
         min: 0,
         max: 255,
+        size: 'small',
         gridArea: '1 / 1 / span 3 / span 1'
       },
       joyControl: {
@@ -42,6 +43,7 @@ export class UiComponent implements OnInit {
         orient: 'is--hor',
         min: 0,
         max: 1000,
+        size: 'small',
         gridArea: '1 / 3 / span 1 / span 3'
       },
       buttonA: {
