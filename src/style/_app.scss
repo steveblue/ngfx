@@ -6,11 +6,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
-  &.is--light {
+  &.ngfx--light--theme {
     background: #efefef;
     color: #101010;
   }
-  &.is--dark {
+  &.ngfx--dark--theme {
     background: #121212;
     color: #fdfdfd;
   }
@@ -28,7 +28,7 @@ a:visited {
   border-style: solid;
   border-color: #444 #fff #fff;
   animation: spin 1.5s cubic-bezier(0.66, 1, 0.66, 1) infinite;
-  opacity: 0.5;
+  opacity: 0.3;
   transform: translate(-50%, -50%) rotate(0deg);
   backface-visibility: none;
   &.is--center {
