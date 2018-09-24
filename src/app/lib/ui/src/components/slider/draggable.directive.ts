@@ -120,8 +120,8 @@ export class NgFxDraggableDirective implements OnInit {
       this._touchItem = e.touches.length - 1; // make this touch = the latest touch in the touches list instead of using event
     }
 
-    this.control.x = e.touches[this._touchItem].pageX - this._rect.left; // - 22; // TODO: figure out why these artificial offsets are here
-    this.control.y = e.touches[this._touchItem].pageY - this._rect.top; // - 66; // TODO: figure out why these artificial offsets are here
+    this.control.x = e.touches[this._touchItem].pageX - this._rect.left - this._handle.getBoundingClientRect().width / 2; // - 22; // TODO: figure out why these artificial offsets are here
+    this.control.y = e.touches[this._touchItem].pageY - this._rect.top - this._handle.getBoundingClientRect().height / 2; // - 66; // TODO: figure out why these artificial offsets are here
 
     if (this.control.hasUserInput && this.control.isActive) {
       this.setPosition(this.control.x, this.control.y);
@@ -132,18 +132,23 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   onMouseMove(e: MouseEvent) {
-    const parent = <HTMLElement>(<HTMLElement>e.target).parentNode;
     if (!this.control.isActive) {
       return;
     }
-    if (this.control.isActive && parent === this._elem) {
-      // this._handle.style.opacity = '0.8';
-      this.control.x = e.offsetX;
+
+    if (this.control.orient === 'is--joystick') {
+      this.control.x = (this._elem.getBoundingClientRect().left - e.pageX) * -1;
+      this.control.y = (this._elem.getBoundingClientRect().top - e.pageY) * -1;
+    }
+
+    if (this.control.orient === 'is--hor') {
+      this.control.x = (this._elem.getBoundingClientRect().left - e.pageX) * -1 - this._handle.getBoundingClientRect().width / 2;
       this.control.y = e.offsetY;
-    } else {
-      // this._handle.style.opacity = '0.8';
-      this.control.x = (this._elem.getBoundingClientRect().left - e.offsetX) * -1;
-      this.control.y = (this._elem.getBoundingClientRect().top - e.offsetY) * -1;
+    }
+
+    if (this.control.orient === 'is--vert') {
+      this.control.x = e.offsetX;
+      this.control.y = (this._elem.getBoundingClientRect().top - e.pageY) * -1 - this._handle.getBoundingClientRect().height / 2;
     }
 
     if (this.control.hasUserInput && this.control.isActive) {

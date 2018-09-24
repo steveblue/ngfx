@@ -42,7 +42,6 @@ export class UiComponent implements OnInit {
         orient: 'is--hor',
         min: 0,
         max: 1000,
-        size: 'small',
         gridArea: '1 / 3 / span 1 / span 3'
       },
       buttonA: {
