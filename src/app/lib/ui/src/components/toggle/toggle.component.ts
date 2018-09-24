@@ -34,6 +34,7 @@ export class NgFxToggleComponent {
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(e: TouchEvent) {
+    e.preventDefault();
     this.toggleActive();
   }
 

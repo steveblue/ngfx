@@ -53,12 +53,43 @@ export class NgFxButtonComponent {
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(e: TouchEvent) {
-    this.onMousedown(e);
+    e.preventDefault();
+    this.control.currentValue = true;
+    this.control.hasUserInput = true;
+    this._controller.onEvent.emit({
+      type: 'change',
+      control: this.control
+    });
+    setTimeout(() => {
+      this.control.currentValue = false;
+      this.control.hasUserInput = false;
+      this._controller.onEvent.emit({
+        type: 'change',
+        control: this.control
+      });
+    }, 50);
+  }
+
+  @HostListener('touchmove', ['$event'])
+  onTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    this.control.currentValue = false;
+    this.control.hasUserInput = false;
+    this._controller.onEvent.emit({
+      type: 'change',
+      control: this.control
+    });
   }
 
   @HostListener('touchend', ['$event'])
   onTouchEnd(e: TouchEvent) {
-    this.onMouseup(e);
+    e.preventDefault();
+    this.control.currentValue = false;
+    this.control.hasUserInput = false;
+    this._controller.onEvent.emit({
+      type: 'change',
+      control: this.control
+    });
   }
 
   constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
