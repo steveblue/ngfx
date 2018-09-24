@@ -2,7 +2,11 @@
 
 ## 1.0.0-beta.4
 
-- UPDATE look and feel of handles on NgFxSliderComponent
+- NEW NgFxToggleComponent displays a toggle button
+- NEW size property on NgFxControl can display components at different sizes
+- NEW themes display NgFxControl in dark or light theme
+- UPDATE NgFxButtonComponent to display icons centered in button when NgFxControl currentValue is true or false
+- UPDATE look and feel for NgFxSliderComponent, NgFxButtonComponent
 
 ## 1.0.0-beta.3
 
