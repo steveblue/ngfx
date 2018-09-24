@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.lib.json",
+  "compilerOptions": {
+    "outDir": "../../../../../out-tsc/es2015",
+    "target": "es2015",
+    "module": "es2015"
+  },
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "annotateForClosureCompiler": true,
+    "flatModuleOutFile": "audio.js",
+    "flatModuleId": "audio"
+  }
+}

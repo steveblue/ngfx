@@ -1,0 +1,28 @@
+{
+  "src": "src/app/lib/audio",
+  "dist": "dist/@ngfx/audio",
+  "filename": "audio",
+  "es2015": {
+    "tsConfig": "tsconfig.lib.fesm2015.json",
+    "rollupConfig": "rollup.config.lib.js",
+    "outFile": "dist/@ngfx/audio/fesm2015/audio.js"
+  },
+  "es5": {
+    "tsConfig": "tsconfig.lib.es5.json",
+    "rollupConfig": "rollup.config.lib-es5.js",
+    "outFile": "dist/@ngfx/audio/fesm5/audio.js"
+  },
+  "umd": {
+    "tsConfig": "tsconfig.lib.umd.json",
+    "rollupConfig": "rollup.config.lib-umd.js",
+    "outFile": "dist/@ngfx/audio/bundles/audio.umd.js"
+  },
+  "esm5": {
+    "tsConfig": "tsconfig.lib.esm5.json",
+    "outFile": "dist/@ngfx/audio/esm5/audio.js"
+  },
+  "esm2015": {
+    "tsConfig": "tsconfig.lib.esm2015.json",
+    "outFile": "dist/@ngfx/audio/esm2015/audio.js"
+  }
+}

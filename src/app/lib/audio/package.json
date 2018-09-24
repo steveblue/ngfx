@@ -1,0 +1,36 @@
+{
+  "name": "@ngfx/audio",
+  "version": "1.0.0-beta.3",
+  "repository": "https://github.com/steveblue/ngfx",
+  "homepage": "https://github.com/steveblue/ngfx#readme",
+  "description": "Angular service that provides easy access to Web Audio API",
+  "bugs": {
+    "url": "https://github.com/steveblue/ngfx/issues"
+  },
+  "keywords": [
+    "audio",
+    "web audio",
+    "audio player",
+    "front end",
+    "angular",
+    "service"
+  ],
+  "license": "MIT",
+  "module": "./esm5/audio.es5.js",
+  "es2015": "./fesm2015/audio.js",
+  "esm5": "./esm5/audio.js",
+  "esm2015": "./esm2015/audio.js",
+  "fesm5": "./fesm5/audio.js",
+  "fesm2015": "./fesm2015/audio.js",
+  "main": "./bundles/audio.umd.js",
+  "typings": "audio.d.ts",
+  "devDependencies": {
+    "@angular/core": "^6.0.0",
+    "@angular/compiler": "^6.0.0",
+    "@angular/compiler-cli": "^6.0.0",
+    "rollup": "^0.55.0",
+    "rxjs": "^6.0.0",
+    "typescript": "^2.7.2",
+    "zone.js": "^0.8.26"
+  }
+}

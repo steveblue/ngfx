@@ -1,0 +1,23 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./../../../../tmp",
+    "sourceMap": false,
+    "declaration": true,
+    "stripInternal": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "allowUnreachableCode": false,
+    "skipLibCheck": true
+  },
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "annotateForClosureCompiler": true,
+    "flatModuleOutFile": "audio.js",
+    "flatModuleId": "audio"
+  },
+  "files": ["./../../../../tmp/index.ts"]
+}

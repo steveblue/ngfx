@@ -19,6 +19,22 @@ module.exports = {
     }
   },
   projects: {
+    '@ngfx/audio': {
+      root: 'src/app/lib/audio',
+      sourceRoot: 'src',
+      projectType: 'library',
+      configFile: 'lib.config.json',
+      architect: {
+        build: {
+          builder: 'angular-rollup',
+          options: {
+            outputPath: 'dist/@ngfx/audio',
+            styles: []
+          }
+        }
+      }
+    },
+
     '@ngfx/ui': {
       root: 'src/app/lib/ui',
       sourceRoot: 'src',
