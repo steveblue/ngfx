@@ -3,7 +3,7 @@
 export default {
   input: 'out-tsc/es5/audio.js',
   output: {
-    file: 'dist/audio/bundles/audio.umd.js',
+    file: 'dist/@ngfx/audio/bundles/audio.umd.js',
     format: 'cjs',
     sourcemap: true
   },

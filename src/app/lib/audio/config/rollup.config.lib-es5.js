@@ -3,7 +3,7 @@
 export default {
   input: 'out-tsc/es5/audio.js',
   output: {
-    file: 'dist/audio/fesm5/audio.js',
+    file: 'dist/@ngfx/audio/fesm5/audio.js',
     format: 'es',
     sourcemap: true
   },
