@@ -1,5 +1,5 @@
 body {
-  background: #000000;
+  background: #121212;
   color: #fdfdfd;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -7,12 +7,12 @@ body {
   margin: 0;
   padding: 0;
   &.is--light {
-    background: #121212;
-    color: #fdfdfd;
-  }
-  &.is--dark {
     background: #efefef;
     color: #101010;
+  }
+  &.is--dark {
+    background: #121212;
+    color: #fdfdfd;
   }
 }
 

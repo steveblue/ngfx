@@ -10,6 +10,7 @@
     flex-direction: row;
     justify-content: center;
     transform: translateY(-4px);
+    user-select: none;
     .control__name {
       color: $highlight-color;
       font-size: 12px;
@@ -63,7 +64,7 @@
   }
 }
 
-.is--light {
+.is--dark {
   :host {
     .ngfx__title {
       .control__name {
@@ -84,7 +85,7 @@
   }
 }
 
-.is--dark {
+.is--light {
   :host {
     .ngfx__title {
       .control__name {
