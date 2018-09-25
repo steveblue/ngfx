@@ -6,6 +6,8 @@ import { NgFxButtonModule } from './../button/button.module';
 import { NgFxSliderModule } from './../slider/slider.module';
 import { NgFxControlModule } from './../../directives/control/control.module';
 
+export * from './audio-player.component';
+
 @NgModule({
   imports: [CommonModule, NgFxSliderModule, NgFxButtonModule, NgFxToggleModule, NgFxControlModule],
   declarations: [NgFxAudioPlayerComponent],
