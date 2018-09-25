@@ -2,22 +2,7 @@ const spawn = require('child_process').spawn;
 const fs = require('fs');
 
 module.exports = {
-  buildHooks: {
-    prod: {
-      pre: () => {
-        return new Promise(res => {
-          // put togic in here for before the production build
-          res();
-        });
-      },
-      post: () => {
-        return new Promise(res => {
-          // put togic in here for after the production build
-          res();
-        });
-      }
-    }
-  },
+  defaultProject: 'ngfx',
   projects: {
     '@ngfx/audio': {
       root: 'src/app/lib/audio',
@@ -29,7 +14,28 @@ module.exports = {
           builder: 'angular-rollup',
           options: {
             outputPath: 'dist/@ngfx/audio',
-            styles: []
+            styles: [],
+            stylePreprocessorOptions: {
+              includePaths: ['src/style'],
+              outputStyle: 'expanded',
+              sourceComments: true
+            }
+          },
+          hooks: {
+            prod: {
+              pre: () => {
+                return new Promise(res => {
+                  // put togic in here for before the production build
+                  res();
+                });
+              },
+              post: () => {
+                return new Promise(res => {
+                  // put togic in here for after the production build
+                  res();
+                });
+              }
+            }
           }
         }
       }
@@ -45,7 +51,28 @@ module.exports = {
           builder: 'angular-rollup',
           options: {
             outputPath: 'dist/@ngfx/ui',
-            styles: []
+            styles: [],
+            stylePreprocessorOptions: {
+              includePaths: ['src/style'],
+              outputStyle: 'expanded',
+              sourceComments: true
+            }
+          },
+          hooks: {
+            prod: {
+              pre: () => {
+                return new Promise(res => {
+                  // put togic in here for before the production build
+                  res();
+                });
+              },
+              post: () => {
+                return new Promise(res => {
+                  // put togic in here for after the production build
+                  res();
+                });
+              }
+            }
           }
         }
       }
@@ -60,7 +87,28 @@ module.exports = {
           builder: 'angular-rollup',
           options: {
             outputPath: 'dist/@ngfx/rtc',
-            styles: []
+            styles: [],
+            stylePreprocessorOptions: {
+              includePaths: ['src/style'],
+              outputStyle: 'expanded',
+              sourceComments: true
+            }
+          },
+          hooks: {
+            prod: {
+              pre: () => {
+                return new Promise(res => {
+                  // put togic in here for before the production build
+                  res();
+                });
+              },
+              post: () => {
+                return new Promise(res => {
+                  // put togic in here for after the production build
+                  res();
+                });
+              }
+            }
           }
         }
       }
@@ -76,6 +124,11 @@ module.exports = {
           options: {
             outputPath: 'dist/ngfx',
             styles: ['src/style/style.scss'],
+            stylePreprocessorOptions: {
+              includePaths: ['src/style'],
+              outputStyle: 'expanded',
+              sourceComments: true
+            },
             lib: {
               dev: [
                 'core-js/client/shim.min.js',
@@ -120,28 +173,24 @@ module.exports = {
               src: 'node_modules',
               dist: 'dist/ngfx/lib'
             }
+          },
+          hooks: {
+            prod: {
+              pre: () => {
+                return new Promise(res => {
+                  // put togic in here for before the production build
+                  res();
+                });
+              },
+              post: () => {
+                return new Promise(res => {
+                  // put togic in here for after the production build
+                  res();
+                });
+              }
+            }
           }
         }
-      }
-    }
-  },
-
-  style: {
-    sass: {
-      dev: {
-        includePaths: ['src/style/'],
-        outputStyle: 'expanded',
-        sourceComments: true
-      },
-      lib: {
-        includePaths: ['src/style/'],
-        outputStyle: 'expanded',
-        sourceComments: false
-      },
-      prod: {
-        includePaths: ['src/style/'],
-        outputStyle: 'expanded',
-        sourceComments: false
       }
     }
   }
