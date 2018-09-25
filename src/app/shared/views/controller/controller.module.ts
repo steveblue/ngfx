@@ -5,6 +5,7 @@ import { NgFxController } from './../../../lib/ui/src/services/controller/contro
 import { NgFxSliderModule } from './../../../lib/ui/src/components/slider/slider.module';
 import { NgFxSurfaceModule } from './../../../lib/ui/src/components/surface/surface.module';
 import { uuid, DataChannelModule } from './../../../lib/rtc/src/services/data-channel/data-channel.module';
+import { NgFxControlModule } from './../../../lib/ui/src/directives/control/control.module';
 
 const DataChannelConfig = {
   key: 'XXXXX',
@@ -16,7 +17,7 @@ const DataChannelConfig = {
 };
 
 @NgModule({
-  imports: [CommonModule, NgFxSliderModule, NgFxSurfaceModule, DataChannelModule.forChild(DataChannelConfig)],
+  imports: [CommonModule, NgFxControlModule, NgFxSliderModule, NgFxSurfaceModule, DataChannelModule.forChild(DataChannelConfig)],
   declarations: [ControllerComponent],
   providers: [NgFxController]
 })

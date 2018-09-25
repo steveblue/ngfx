@@ -103,11 +103,7 @@ export class UiComponent implements OnInit {
       }
     };
 
-    this.controller.createSurface(this.uiSurface.id, this.uiSurface.controls);
-  }
-
-  sanitize(style: string) {
-    return this._sanitizer.bypassSecurityTrustStyle(style);
+    this.controller.createSurface(this.uiSurface);
   }
 
   ngOnInit() {

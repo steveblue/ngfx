@@ -9,11 +9,8 @@ export class NgFxController {
   onEvent: EventEmitter<NgFxEvent> = new EventEmitter();
   constructor() {}
 
-  createSurface(id: string, controls: { [prop: string]: NgFxControl }) {
-    this.surfaces[id] = {
-      id: id,
-      controls: controls
-    };
+  createSurface(surface: NgFxSurface) {
+    this.surfaces[surface.id] = surface;
   }
 
   getSurface(id: string) {

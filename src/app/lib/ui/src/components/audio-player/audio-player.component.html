@@ -1,8 +1,8 @@
 <div class="control__group"
     [ngStyle]="{
-        'display': surface.style.display,
-        'grid': surface.style.grid,
-        'grid-gap': surface.style.gridGap
+        'display': getSurface().style.display,
+        'grid': getSurface().style.grid,
+        'grid-gap': getSurface().style.gridGap
     }" >
   <ng-container *ngFor="let control of controlMap">
       <ngfx-slider ngfxControl *ngIf="control.type === 'slider'" [control]="control" class="control__pane"></ngfx-slider>

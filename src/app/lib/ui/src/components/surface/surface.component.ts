@@ -10,19 +10,15 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
   styleUrls: ['./surface.component.css']
 })
 export class NgFxSurfaceComponent implements OnInit, OnChanges {
-  @Input('controller')
-  controller: string;
-
-  @Input('surface')
-  surface: NgFxSurface;
-
+  @Input('surfaceId')
+  surfaceId: string;
   controlMap: NgFxControl[] = new Array();
 
   constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.controller) {
-      this.controlMap = this.mapToControls(changes.controller.currentValue);
+    if (changes.surfaceId) {
+      this.controlMap = this.mapToControls(changes.surfaceId.currentValue);
     }
   }
 
@@ -30,6 +26,10 @@ export class NgFxSurfaceComponent implements OnInit, OnChanges {
     return Object.keys(this._controller.surfaces[key].controls).map((prop: string) => {
       return this._controller.surfaces[key].controls[prop];
     });
+  }
+
+  getSurface(key: string) {
+    return this._controller.surfaces[this.surfaceId];
   }
 
   sanitize(style: string): SafeStyle {

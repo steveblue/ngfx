@@ -25,7 +25,7 @@ export class ControllerComponent implements OnInit {
     this.uiSurface = {
       id: 'testControls',
       style: {
-        grid: 'auto 240px / 240px auto 240px',
+        grid: '240px auto 240px / 240px auto 240px',
         gridGap: '0px 0px'
       },
       controls: {
@@ -57,7 +57,7 @@ export class ControllerComponent implements OnInit {
         }
       }
     };
-    this.controller.createSurface(this.uiSurface.id, this.uiSurface.controls);
+    this.controller.createSurface(this.uiSurface);
   }
 
   ngOnInit() {

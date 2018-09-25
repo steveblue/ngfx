@@ -12,16 +12,9 @@ import { NgFxSurface } from './../../interfaces/surface';
 })
 export class NgFxAudioPlayerComponent implements OnInit {
   surface: NgFxSurface;
-  grid: string;
-  gridGap: string;
-  display: string;
   controlMap: NgFxControl[] = new Array();
 
-  constructor(public controller: NgFxController, private _sanitizer: DomSanitizer) {
-    this.grid = '18px 18px 18px / 18px 18px 18px 18px 18px 18px 18px 18px 18px';
-    this.gridGap = '18px 18px';
-    this.display = 'inline-grid';
-
+  constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {
     this.surface = {
       id: 'audioControls',
       style: {
@@ -48,7 +41,8 @@ export class NgFxAudioPlayerComponent implements OnInit {
           size: 'small',
           style: {
             gridArea: '2 / 4 / span 1 / span 1',
-            borderRadius: 'initial'
+            borderRadius: 'initial',
+            background: 'transparent'
           }
         },
         play: {
@@ -57,7 +51,8 @@ export class NgFxAudioPlayerComponent implements OnInit {
           size: 'small',
           style: {
             gridArea: '2 / 5 / span 1 / span 1',
-            borderRadius: 'initial'
+            borderRadius: 'initial',
+            background: 'transparent'
           }
         },
         ff: {
@@ -66,15 +61,15 @@ export class NgFxAudioPlayerComponent implements OnInit {
           size: 'small',
           style: {
             gridArea: '2 / 6 / span 1 / span 1',
-            borderRadius: 'initial'
+            borderRadius: 'initial',
+            background: 'transparent'
           }
         }
       }
     };
 
-    this.controller.createSurface(this.surface.id, this.surface.controls);
-
-    this.controlMap = this.mapToControls('audioControls');
+    this._controller.createSurface(this.surface);
+    this.controlMap = this.mapToControls(this.surface.id);
   }
 
   sanitize(style: string) {
@@ -83,14 +78,18 @@ export class NgFxAudioPlayerComponent implements OnInit {
 
   ngOnInit() {
     // TODO: move to service or find another way to combine DataChannel
-    this.controller.onEvent.subscribe((ev: NgFxEvent) => {
+    this._controller.onEvent.subscribe((ev: NgFxEvent) => {
       console.log(ev.control.name, ev.control.currentValue);
     });
   }
 
+  getSurface() {
+    return this._controller.surfaces[this.surface.id];
+  }
+
   mapToControls(key: string) {
-    return Object.keys(this.controller.surfaces[key].controls).map((prop: string) => {
-      return this.controller.surfaces[key].controls[prop];
+    return Object.keys(this._controller.surfaces[key].controls).map((prop: string) => {
+      return this._controller.surfaces[key].controls[prop];
     });
   }
 }

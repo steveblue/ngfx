@@ -8,25 +8,29 @@ import { NgFxSurface } from './../../interfaces/surface';
   selector: 'ngfxSurface, [ngfxSurface]'
 })
 export class NgFxSurfaceDirective {
-  @Input('surface')
-  surface: NgFxSurface;
+  @Input('surfaceId')
+  surfaceId: string;
 
   @HostBinding('style.grid')
   get grid(): SafeStyle {
-    return this.sanitize(this.surface.style.grid) || this.sanitize('');
+    return this.sanitize(this.getSurface().style.grid) || this.sanitize('');
   }
 
   @HostBinding('style.grid-gap')
   get gridGap(): SafeStyle {
-    return this.sanitize(this.surface.style.gridGap) || this.sanitize('');
+    return this.sanitize(this.getSurface().style.gridGap) || this.sanitize('');
   }
 
   @HostBinding('style.display')
   get display(): SafeStyle {
-    return this.sanitize(this.surface.style.display) || this.sanitize('grid');
+    return this.getSurface().style.display ? this.sanitize(this.getSurface().style.display) : 'grid';
   }
 
   constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
+
+  getSurface() {
+    return this._controller.surfaces[this.surfaceId];
+  }
 
   sanitize(style: string): SafeStyle {
     return this._sanitizer.bypassSecurityTrustStyle(style);
