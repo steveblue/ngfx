@@ -9,6 +9,12 @@
     <div class="ngfx__draggable"
          ngfxDraggable
          [control]="control"
+         [ngStyle]="{'display': control.style.display,
+                'border-radius': control.style.borderRadius,
+                'border': control.style.border,
+                'color': control.style.color,
+                'background': control.style.background,
+                'background-repeat': control.style.backgroundRepeat }"
          [ngClass]="{'is--active': control.hasUserInput === true }">
         <div class="ngfx__range">
             <div class="ngfx__handle"></div>

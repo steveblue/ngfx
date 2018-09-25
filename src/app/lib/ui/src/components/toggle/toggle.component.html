@@ -2,7 +2,14 @@
   <span class="control__name">{{control.name.charAt(0).toUpperCase()}}</span>
   <span class="slave__indicator" [ngClass]="{'is--visible': control.hasRemoteInput === true }"></span>
 </div>
-<div class="ngfx__button" [ngClass]="{'is--active' : control.currentValue === true, 'is--small': control.size === 'small' }">
+<div class="ngfx__button"
+    [ngStyle]="{'display': control.style.display,
+                'border-radius': control.style.borderRadius,
+                'border': control.style.border,
+                'color': control.style.color,
+                'background': control.style.background,
+                'background-repeat': control.style.backgroundRepeat }"
+    [ngClass]="{'is--active' : control.currentValue === true, 'is--small': control.size === 'small' }">
   <span class="ngfx__button__icon" *ngIf="control.currentValue === true"><ng-content select="[activeIcon]"></ng-content></span>
   <span class="ngfx__button__icon" *ngIf="control.currentValue === false"><ng-content select="[inactiveIcon]"></ng-content></span>
 </div>

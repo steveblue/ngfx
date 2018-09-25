@@ -15,21 +15,6 @@ export class NgFxButtonComponent {
   @Input('control')
   control: NgFxControl;
 
-  @HostBinding('style.transform')
-  get transform(): SafeStyle {
-    return this.sanitize(this.control.transform) || this.sanitize('');
-  }
-
-  @HostBinding('style.grid-area')
-  get gridArea(): SafeStyle {
-    return this.sanitize(this.control.gridArea) || this.sanitize('');
-  }
-
-  @HostBinding('style.place-self')
-  get placeSelf(): SafeStyle {
-    return this.sanitize(this.control.placeSelf) || this.sanitize('');
-  }
-
   @HostListener('mouseup', ['$event'])
   onMouseup(event: MouseEvent | TouchEvent) {
     this.onHold = false;
@@ -105,9 +90,5 @@ export class NgFxButtonComponent {
 
   hasName() {
     return this.control.name !== undefined && this.control.name.length > 0;
-  }
-
-  sanitize(style: string): SafeStyle {
-    return this._sanitizer.bypassSecurityTrustStyle(style);
   }
 }

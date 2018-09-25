@@ -7,9 +7,19 @@ import { NgFxSurfaceModule } from './../../../lib/ui/src/components/surface/surf
 import { NgFxButtonModule } from './../../../lib/ui/src/components/button/button.module';
 import { NgFxToggleModule } from './../../../lib/ui/src/components/toggle/toggle.module';
 import { NgFxAudioPlayerModule } from './../../../lib/ui/src/components/audio-player/audio-player.module';
+import { NgFxControlModule } from './../../../lib/ui/src/directives/control/control.module';
 
 @NgModule({
-  imports: [CommonModule, NgFxAudioPlayerModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule, NgFxToggleModule],
+  imports: [
+    CommonModule,
+    NgFxControlModule,
+    NgFxSurfaceModule,
+    NgFxAudioPlayerModule,
+    NgFxSurfaceModule,
+    NgFxSliderModule,
+    NgFxButtonModule,
+    NgFxToggleModule
+  ],
   declarations: [UiComponent],
   providers: [NgFxController]
 })

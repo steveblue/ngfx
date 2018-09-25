@@ -1,3 +1,4 @@
+import { NgFxSurface } from './../../interfaces/surface';
 import { Component, HostBinding, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgFxController } from '../../services/controller/controller.service';
 import { NgFxControl } from './../../../src/interfaces/control';
@@ -12,14 +13,8 @@ export class NgFxSurfaceComponent implements OnInit, OnChanges {
   @Input('controller')
   controller: string;
 
-  @Input('grid')
-  grid: string;
-
-  @Input('gridGap')
-  gridGap: string;
-
-  @Input('display')
-  display: string;
+  @Input('surface')
+  surface: NgFxSurface;
 
   controlMap: NgFxControl[] = new Array();
 

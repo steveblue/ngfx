@@ -18,7 +18,18 @@ export interface NgFxControl {
   size?: string;
   timeStamp?: Date | number;
   snapToCenter?: boolean;
-  gridArea?: string;
-  placeSelf?: string;
-  transform?: string;
+  style?: {
+    display?: string;
+    color?: string;
+    border?: string;
+    borderRadius?: string;
+    textAlign?: string;
+    background?: string;
+    backgroundRepeat?: string;
+    backgroundPosition?: string;
+    backgroundSize?: string;
+    gridArea?: string;
+    placeSelf?: string;
+    transform?: string;
+  };
 }
