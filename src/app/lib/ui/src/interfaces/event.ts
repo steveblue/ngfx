@@ -1,7 +1,9 @@
 import { NgFxControl } from './control';
+import { NgFxSurface } from './surface';
 
 export interface NgFxEvent {
   type: string;
   endFrame?: boolean;
-  control: NgFxControl;
+  control?: NgFxControl;
+  surface?: NgFxSurface;
 }
