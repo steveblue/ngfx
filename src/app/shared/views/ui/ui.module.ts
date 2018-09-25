@@ -6,9 +6,10 @@ import { NgFxSliderModule } from './../../../lib/ui/src/components/slider/slider
 import { NgFxSurfaceModule } from './../../../lib/ui/src/components/surface/surface.module';
 import { NgFxButtonModule } from './../../../lib/ui/src/components/button/button.module';
 import { NgFxToggleModule } from './../../../lib/ui/src/components/toggle/toggle.module';
+import { NgFxAudioPlayerModule } from './../../../lib/ui/src/components/audio-player/audio-player.module';
 
 @NgModule({
-  imports: [CommonModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule, NgFxToggleModule],
+  imports: [CommonModule, NgFxAudioPlayerModule, NgFxSurfaceModule, NgFxSliderModule, NgFxButtonModule, NgFxToggleModule],
   declarations: [UiComponent],
   providers: [NgFxController]
 })

@@ -28,7 +28,7 @@ export class ControllerComponent implements OnInit {
       joyLeft: {
         type: 'slider',
         name: 'joystick',
-        orient: 'is--joystick',
+        orient: 'joy',
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,
@@ -39,7 +39,7 @@ export class ControllerComponent implements OnInit {
       joyRight: {
         type: 'slider',
         name: 'joystick',
-        orient: 'is--joystick',
+        orient: 'joy',
         min: [0, 0],
         max: [1024, 1024],
         snapToCenter: true,

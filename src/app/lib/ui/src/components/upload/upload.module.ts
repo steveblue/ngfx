@@ -4,6 +4,7 @@ import { NgFxUploadComponent } from './upload.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [NgFxUploadComponent]
+  declarations: [NgFxUploadComponent],
+  exports: [NgFxUploadComponent]
 })
 export class NgFxUploadModule {}

@@ -22,7 +22,7 @@ export class UiComponent implements OnInit {
       vertControl: {
         type: 'slider',
         name: 'slider',
-        orient: 'is--vert',
+        orient: 'vert',
         min: 0,
         max: 255,
         size: 'small',
@@ -31,7 +31,7 @@ export class UiComponent implements OnInit {
       joyControl: {
         type: 'slider',
         name: 'joystick',
-        orient: 'is--joystick',
+        orient: 'joy',
         min: [0, 0],
         max: [255, 255],
         snapToCenter: true,
@@ -40,7 +40,7 @@ export class UiComponent implements OnInit {
       horControl: {
         type: 'slider',
         name: 'h',
-        orient: 'is--hor',
+        orient: 'hor',
         min: 0,
         max: 1000,
         gridArea: '1 / 3 / span 1 / span 3'

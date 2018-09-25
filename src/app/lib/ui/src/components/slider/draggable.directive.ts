@@ -31,13 +31,13 @@ export class NgFxDraggableDirective implements OnInit {
     this.control.height = this._elem.clientHeight;
     this.control.width = this._elem.clientWidth;
 
-    if (this.control.orient === 'is--hor') {
+    if (this.control.orient === 'hor') {
       this.control.currentValue = 0;
       this.control.position = 'translate(' + 0 + 'px' + ',' + 0 + 'px' + ')';
-    } else if (this.control.orient === 'is--vert') {
+    } else if (this.control.orient === 'vert') {
       this.control.currentValue = 0;
       this.control.position = 'translate(' + 0 + 'px' + ',' + 0 + 'px' + ')';
-    } else if (this.control.orient === 'is--joystick') {
+    } else if (this.control.orient === 'joy') {
       this.control.currentValue = [0, 0];
       this.control.x = this.control.y = 76;
       this.control.position = 'translate(' + 76 + 'px' + ',' + 76 + 'px' + ')';
@@ -136,17 +136,17 @@ export class NgFxDraggableDirective implements OnInit {
       return;
     }
 
-    if (this.control.orient === 'is--joystick') {
+    if (this.control.orient === 'joy') {
       this.control.x = (this._elem.getBoundingClientRect().left - e.pageX) * -1;
       this.control.y = (this._elem.getBoundingClientRect().top - e.pageY) * -1;
     }
 
-    if (this.control.orient === 'is--hor') {
+    if (this.control.orient === 'hor') {
       this.control.x = (this._elem.getBoundingClientRect().left - e.pageX) * -1 - this._handle.getBoundingClientRect().width / 2;
       this.control.y = e.offsetY;
     }
 
-    if (this.control.orient === 'is--vert') {
+    if (this.control.orient === 'vert') {
       this.control.x = e.offsetX;
       this.control.y = (this._elem.getBoundingClientRect().top - e.pageY) * -1 - this._handle.getBoundingClientRect().height / 2;
     }
@@ -173,7 +173,7 @@ export class NgFxDraggableDirective implements OnInit {
       this._elem.removeEventListener('mouseup', this.onMouseUp.bind(this));
     }
 
-    if (this.control.orient === 'is--joystick' && this.control.snapToCenter === true) {
+    if (this.control.orient === 'joy' && this.control.snapToCenter === true) {
       const center = this.getCenter(
         [0, this.control.width - this._handle.offsetWidth],
         [0, this.control.height - this._handle.offsetHeight]
@@ -283,17 +283,17 @@ export class NgFxDraggableDirective implements OnInit {
   }
 
   setValue() {
-    if (this.control.orient === 'is--hor') {
+    if (this.control.orient === 'hor') {
       this.control.currentValue = this.clampSlider(
         this.scale(this.control.x, 0, this.control.width - 44, <number>this.control.min, <number>this.control.max)
       );
     }
-    if (this.control.orient === 'is--vert') {
+    if (this.control.orient === 'vert') {
       this.control.currentValue = this.clampSlider(
         this.scale(this.control.y, 0, this.control.height - 44, <number>this.control.min, <number>this.control.max)
       );
     }
-    if (this.control.orient === 'is--joystick') {
+    if (this.control.orient === 'joy') {
       this.control.currentValue = [
         this.clampJoystickX(this.scale(this.control.x, 0, this.control.width - 44, this.control.min[0], this.control.max[0])),
         this.clampJoystickY(this.scale(this.control.y, 0, this.control.height - 44, this.control.min[1], this.control.max[1]))
@@ -311,7 +311,7 @@ export class NgFxDraggableDirective implements OnInit {
       return val;
     };
 
-    if (this.control.orient === 'is--joystick') {
+    if (this.control.orient === 'joy') {
       this._joystickPos = this.circularBounds(
         this.control.x,
         this.control.y,
