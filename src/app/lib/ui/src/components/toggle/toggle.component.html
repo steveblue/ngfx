@@ -1,4 +1,4 @@
-<div class="ngfx__title" [hidden]="!hasName()" [ngClass]="{'is--small': control.size === 'small' }">
+<div class="ngfx__title" *ngIf="hasName()" [ngClass]="{'is--small': control.size === 'small' }">
   <span class="control__name">{{control.name.charAt(0).toUpperCase()}}</span>
   <span class="slave__indicator" [ngClass]="{'is--visible': control.hasRemoteInput === true }"></span>
 </div>
@@ -8,8 +8,8 @@
                 'border': control.style.border,
                 'color': control.style.color,
                 'background': control.style.background,
-                'background-repeat': control.style.backgroundRepeat }"
+                'background-repeat': control.style.backgroundRepeat ? control.style.backgroundRepeat : 'no-repeat' }"
     [ngClass]="{'is--active' : control.currentValue === true, 'is--small': control.size === 'small' }">
-  <span class="ngfx__button__icon" *ngIf="control.currentValue === true"><ng-content select="[activeIcon]"></ng-content></span>
-  <span class="ngfx__button__icon" *ngIf="control.currentValue === false"><ng-content select="[inactiveIcon]"></ng-content></span>
+  <span class="ngfx__button__icon" [hidden]="control.currentValue === false"><ng-content select="[activeIcon]"></ng-content></span>
+  <span class="ngfx__button__icon" [hidden]="control.currentValue === true"><ng-content select="[inactiveIcon]"></ng-content></span>
 </div>

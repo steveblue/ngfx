@@ -1,0 +1,180 @@
+@import 'util/variables';
+.ngfx--dark--theme {
+  :host::ng-deep {
+    .ngfx__icon {
+      display: block;
+      opacity: 0.3;
+      &.is--active,
+      &:active {
+        opacity: 0.5;
+      }
+      &.i__fast__forward {
+        width: 18px;
+        height: 12px;
+        background: $light-ic-fast-forward;
+      }
+      &.i__rewind {
+        width: 18px;
+        height: 12px;
+        background: $light-ic-fast-rewind;
+      }
+      &.i__mic {
+        width: 14px;
+        height: 19px;
+        background: $light-ic-mic;
+        &.is--none {
+          width: 14px;
+          height: 19px;
+          background: $light-ic-mic-none;
+        }
+        &.is--off {
+          width: 18px;
+          height: 19px;
+          background: $light-ic-mic-off;
+        }
+      }
+      &.i__pause {
+        width: 12px;
+        height: 14px;
+        background: $light-ic-pause;
+      }
+      &.i__play {
+        width: 11px;
+        height: 14px;
+        background: $light-ic-play-arrow;
+      }
+      &.i__skip {
+        &.is--next {
+          width: 12px;
+          height: 12px;
+          background: $light-ic-skip-next;
+        }
+        &.is--prev {
+          width: 12px;
+          height: 12px;
+          background: $light-ic-skip-prev;
+        }
+      }
+      &.i__videocam {
+        width: 18px;
+        height: 12px;
+        background: $light-ic-videocam;
+        &.is--off {
+          width: 19px;
+          height: 19px;
+          background: $light-ic-videocam-off;
+        }
+      }
+      &.i__volume {
+        &.is--mute {
+          width: 9px;
+          height: 16px;
+          background: $light-ic-volume-mute;
+        }
+        &.is--up {
+          width: 18px;
+          height: 18px;
+          background: $light-ic-volume-up;
+        }
+        &.is--down {
+          width: 14px;
+          height: 16px;
+          background: $light-ic-volume-down;
+        }
+        &.is--off {
+          width: 18px;
+          height: 18px;
+          background: $light-ic-volume-off;
+        }
+      }
+    }
+  }
+}
+
+.ngfx--light--theme {
+  :host::ng-deep {
+    .ngfx__icon {
+      display: block;
+      opacity: 0.3;
+      &.i__fast__forward {
+        width: 18px;
+        height: 12px;
+        background: $dark-ic-fast-forward;
+      }
+      &.i__rewind {
+        width: 18px;
+        height: 12px;
+        background: $dark-ic-fast-rewind;
+      }
+      &.i__mic {
+        width: 14px;
+        height: 19px;
+        background: $dark-ic-mic;
+        &.is--none {
+          width: 14px;
+          height: 19px;
+          background: $dark-ic-mic-none;
+        }
+        &.is--off {
+          width: 18px;
+          height: 19px;
+          background: $dark-ic-mic-off;
+        }
+      }
+      &.i__pause {
+        width: 12px;
+        height: 14px;
+        background: $dark-ic-pause;
+      }
+      &.i__play {
+        width: 11px;
+        height: 14px;
+        background: $dark-ic-play-arrow;
+      }
+      &.i__skip {
+        &.is--next {
+          width: 12px;
+          height: 12px;
+          background: $dark-ic-skip-next;
+        }
+        &.is--prev {
+          width: 12px;
+          height: 12px;
+          background: $dark-ic-skip-prev;
+        }
+      }
+      &.i__videocam {
+        width: 18px;
+        height: 12px;
+        background: $dark-ic-videocam;
+        &.is--off {
+          width: 19px;
+          height: 19px;
+          background: $dark-ic-videocam-off;
+        }
+      }
+      &.i__volume {
+        &.is--mute {
+          width: 9px;
+          height: 16px;
+          background: $dark-ic-volume-mute;
+        }
+        &.is--up {
+          width: 18px;
+          height: 18px;
+          background: $dark-ic-volume-up;
+        }
+        &.is--down {
+          width: 14px;
+          height: 16px;
+          background: $dark-ic-volume-down;
+        }
+        &.is--off {
+          width: 18px;
+          height: 18px;
+          background: $dark-ic-volume-off;
+        }
+      }
+    }
+  }
+}

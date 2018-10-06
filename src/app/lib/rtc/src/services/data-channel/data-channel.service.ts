@@ -141,7 +141,7 @@ export class NgFxDataChannel {
     if (isSafari) {
       // TODO: check for version as well. call to navigator.getUserMedia is required even for data channel in safari
       navigator.getUserMedia(
-        { audio: false, video: { width: 1280, height: 720 } },
+        { audio: true, video: { width: 1280, height: 720 } },
         stream => {},
         err => {
           console.log('error: ' + err.name);

@@ -2,7 +2,8 @@ import { SafeStyle } from '@angular/platform-browser';
 
 export interface NgFxControl {
   type: string;
-  name: string;
+  id?: string;
+  name?: string;
   orient?: string;
   min?: number | number[];
   max?: number | number[];

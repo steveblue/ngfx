@@ -4,9 +4,17 @@
         'grid': getSurface().style.grid,
         'grid-gap': getSurface().style.gridGap
     }" >
-  <ng-container *ngFor="let control of controlMap">
-      <ngfx-slider ngfxControl *ngIf="control.type === 'slider'" [control]="control" class="control__pane"></ngfx-slider>
-      <ngfx-button ngfxControl *ngIf="control.type === 'button'" [control]="control" class="control__pane"></ngfx-button>
-      <ngfx-toggle ngfxControl *ngIf="control.type === 'toggle'" [control]="control" class="control__pane"></ngfx-toggle>
-  </ng-container>
+    <ngfx-slider ngfxControl  [control]="controller.getSurface(surfaceId).controls['playhead']" class="control__pane"></ngfx-slider>
+    <ngfx-button ngfxControl [control]="controller.getSurface(surfaceId).controls['rw']" class="control__pane">
+        <span class="ngfx__icon i__rewind" [ngClass]="{'is--active': controller.getSurface(surfaceId).controls['rw'].currentValue === true }" activeIcon></span>
+        <span class="ngfx__icon i__rewind" [ngClass]="{'is--active': controller.getSurface(surfaceId).controls['rw'].currentValue === true }" inactiveIcon></span>
+    </ngfx-button>
+    <ngfx-toggle ngfxControl [control]="controller.getSurface(surfaceId).controls['play']"  class="control__pane">
+        <span class="ngfx__icon i__play" activeIcon></span>
+        <span class="ngfx__icon i__pause" inactiveIcon></span>
+    </ngfx-toggle>
+    <ngfx-button ngfxControl [control]="controller.getSurface(surfaceId).controls['ff']" class="control__pane">
+        <span class="ngfx__icon i__fast__forward" [ngClass]="{'is--active': controller.getSurface(surfaceId).controls['ff'].currentValue === true }" activeIcon></span>
+        <span class="ngfx__icon i__fast__forward" [ngClass]="{'is--active': controller.getSurface(surfaceId).controls['ff'].currentValue === true }" inactiveIcon></span>
+    </ngfx-button>
 </div>

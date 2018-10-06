@@ -11,7 +11,7 @@ import { RtcModule } from './shared/views/rtc/rtc.module';
 import { UiModule } from './shared/views/ui/ui.module';
 
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, CommonModule, ControllerModule, ControllerTestModule, RtcModule, UiModule, routing],
+  imports: [BrowserModule, CommonModule, ControllerModule, ControllerTestModule, RtcModule, UiModule, routing],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })

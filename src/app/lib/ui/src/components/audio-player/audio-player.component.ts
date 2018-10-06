@@ -16,7 +16,7 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
   surface: NgFxSurface;
   controlMap: NgFxControl[] = new Array();
 
-  constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
+  constructor(public controller: NgFxController, private _sanitizer: DomSanitizer) {}
 
   sanitize(style: string) {
     return this._sanitizer.bypassSecurityTrustStyle(style);
@@ -24,7 +24,7 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     // TODO: move to service or find another way to combine DataChannel
-    this._controller.onEvent.subscribe((ev: NgFxEvent) => {
+    this.controller.onEvent.subscribe((ev: NgFxEvent) => {
       console.log(ev.control.name, ev.control.currentValue);
     });
   }
@@ -41,7 +41,7 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
         controls: {
           playhead: {
             type: 'slider',
-            name: 'a',
+            name: 'play',
             orient: 'hor',
             min: 0,
             max: 1000,
@@ -53,8 +53,9 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
           },
           rw: {
             type: 'button',
-            name: '<<',
+            id: 'rw',
             size: 'small',
+            currentValue: false,
             style: {
               gridArea: '2 / 4 / span 1 / span 1',
               borderRadius: 'initial',
@@ -62,9 +63,10 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
             }
           },
           play: {
-            type: 'button',
-            name: '>',
+            type: 'toggle',
+            id: 'play',
             size: 'small',
+            currentValue: true,
             style: {
               gridArea: '2 / 5 / span 1 / span 1',
               borderRadius: 'initial',
@@ -73,8 +75,9 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
           },
           ff: {
             type: 'button',
-            name: '>>',
+            id: 'ff',
             size: 'small',
+            currentValue: false,
             style: {
               gridArea: '2 / 6 / span 1 / span 1',
               borderRadius: 'initial',
@@ -83,18 +86,18 @@ export class NgFxAudioPlayerComponent implements OnInit, OnChanges {
           }
         }
       };
-      this._controller.createSurface(this.surface);
+      this.controller.createSurface(this.surface);
       this.controlMap = this.mapToControls(changes.surfaceId.currentValue);
     }
   }
 
   getSurface() {
-    return this._controller.surfaces[this.surface.id];
+    return this.controller.surfaces[this.surface.id];
   }
 
   mapToControls(key: string) {
-    return Object.keys(this._controller.surfaces[key].controls).map((prop: string) => {
-      return this._controller.surfaces[key].controls[prop];
+    return Object.keys(this.controller.surfaces[key].controls).map((prop: string) => {
+      return this.controller.surfaces[key].controls[prop];
     });
   }
 }
