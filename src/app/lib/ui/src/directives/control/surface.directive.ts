@@ -1,5 +1,4 @@
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
-import { NgFxControl } from './../../interfaces/control';
 import { NgFxController } from './../../services/controller/controller.service';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { NgFxSurface } from './../../interfaces/surface';
@@ -28,7 +27,7 @@ export class NgFxSurfaceDirective {
 
   constructor(private _controller: NgFxController, private _sanitizer: DomSanitizer) {}
 
-  getSurface() {
+  getSurface(): NgFxSurface {
     return this._controller.surfaces[this.surfaceId];
   }
 

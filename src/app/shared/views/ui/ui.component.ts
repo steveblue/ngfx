@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { NgFxControl } from './../../../lib/ui/src/interfaces/control';
 import { NgFxEvent } from './../../../lib/ui/src/interfaces/event';
 import { NgFxController } from '../../../lib/ui/src/services/controller/controller.service';
 import { NgFxSurface } from '../../../lib/ui/src/interfaces/surface';

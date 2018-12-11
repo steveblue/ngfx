@@ -16,7 +16,7 @@
     "service"
   ],
   "license": "MIT",
-  "module": "./esm5/audio.es5.js",
+  "module": "./esm5/audio.js",
   "es2015": "./fesm2015/audio.js",
   "esm5": "./esm5/audio.js",
   "esm2015": "./esm2015/audio.js",

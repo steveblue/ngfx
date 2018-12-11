@@ -15,7 +15,6 @@ import { NgFxControlModule } from './../../../lib/ui/src/directives/control/cont
     NgFxControlModule,
     NgFxSurfaceModule,
     NgFxAudioPlayerModule,
-    NgFxSurfaceModule,
     NgFxSliderModule,
     NgFxButtonModule,
     NgFxToggleModule
